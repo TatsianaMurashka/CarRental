@@ -9,6 +9,7 @@ public class Main {
         System.out.println(generateInt());
         System.out.println(generateFloat());
         System.out.println(generateLong());
+
     }
 
     private static long generateLong() {
@@ -24,6 +25,6 @@ public class Main {
     }
 
     private static String generateWelcomePhrase() {
-        return "My main";
+        return "My main phrase";
     }
 }
