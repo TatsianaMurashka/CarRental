@@ -2,9 +2,11 @@ package com.htp;
 
 public class Main {
     public static void main(String[] args) {
+      
+        System.out.println(generateWelcomePhrase());
+    }
 
-        System.out.println("Main");
-
-
+    private static String generateWelcomePhrase() {
+        return "My main";
     }
 }
