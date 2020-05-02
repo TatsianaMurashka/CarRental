@@ -4,7 +4,7 @@ import org.apache.commons.lang3.RandomUtils;
 
 public class Main {
     public static void main(String[] args) {
-
+     
         System.out.println(generateWelcomePhrase());
         System.out.println(generateInt());
     }
