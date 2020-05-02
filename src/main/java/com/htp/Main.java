@@ -7,7 +7,6 @@ public class Main {
 
         System.out.println(generateWelcomePhrase());
         System.out.println(generateInt());
-        System.out.println(generateFloat());
         System.out.println(generateLong());
         System.out.println(generateDouble());
 
@@ -19,10 +18,6 @@ public class Main {
 
     private static long generateLong() {
         return RandomUtils.nextLong();
-    }
-
-    private static float generateFloat() {
-        return RandomUtils.nextFloat();
     }
 
     private static int generateInt() {
