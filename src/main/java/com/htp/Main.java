@@ -25,6 +25,6 @@ public class Main {
     }
 
     private static String generateWelcomePhrase() {
-        return "My main phrase";
+        return "My main REBASE phrase";
     }
 }
