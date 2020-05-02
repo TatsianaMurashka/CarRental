@@ -7,11 +7,6 @@ public class Main {
 
         System.out.println(generateWelcomePhrase());
         System.out.println(generateInt());
-        System.out.println(generateDouble());
-    }
-
-    private static double generateDouble() {
-        return RandomUtils.nextDouble();
     }
 
     private static int generateInt() {
