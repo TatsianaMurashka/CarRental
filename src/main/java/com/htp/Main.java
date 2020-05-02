@@ -9,7 +9,12 @@ public class Main {
         System.out.println(generateInt());
         System.out.println(generateFloat());
         System.out.println(generateLong());
+        System.out.println(generateDouble());
 
+    }
+
+    private static double generateDouble() {
+        return RandomUtils.nextDouble();
     }
 
     private static long generateLong() {
