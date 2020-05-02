@@ -7,6 +7,11 @@ public class Main {
 
         System.out.println(generateWelcomePhrase());
         System.out.println(generateInt());
+        System.out.println(generateFloat());
+    }
+
+    private static float generateFloat() {
+        return RandomUtils.nextFloat();
     }
 
     private static int generateInt() {
