@@ -4,9 +4,14 @@ import org.apache.commons.lang3.RandomUtils;
 
 public class Main {
     public static void main(String[] args) {
-     
+
         System.out.println(generateWelcomePhrase());
         System.out.println(generateInt());
+        System.out.println(generateDouble());
+    }
+
+    private static double generateDouble() {
+        return RandomUtils.nextDouble();
     }
 
     private static int generateInt() {
