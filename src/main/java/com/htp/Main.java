@@ -9,7 +9,6 @@ public class Main {
         System.out.println(generateInt());
         System.out.println(generateLong());
         System.out.println(generateDouble());
-        System.out.println(generateWelcomePhrase());
 
     }
 
