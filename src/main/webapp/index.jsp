@@ -4,6 +4,6 @@
     <title>Start!</title>
 </head>
 <body>
-.jsp -> .java -> .class -> executing
+Start page :)
 </body>
 </html>
