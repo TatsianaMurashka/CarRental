@@ -1,11 +1,9 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Bye bye!</title>
+    <title>Errors!</title>
 </head>
 <body>
-${userNames}
-${carNames}
-${locationNames}
+${errors}
 </body>
 </html>
