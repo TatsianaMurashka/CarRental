@@ -1,5 +1,6 @@
 package com.htp.domain;
 
+import java.sql.Timestamp;
 import java.util.Objects;
 
 public class User {
@@ -12,6 +13,16 @@ public class User {
     private String phoneNumber;
 
     private String passportData;
+
+    private String login;
+
+    private String password;
+
+    private Timestamp created;
+
+    private Timestamp changed;
+
+    private Long locationId;
 
     public User() {
     }
@@ -56,6 +67,45 @@ public class User {
         this.passportData = passportData;
     }
 
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Timestamp getCreated() {
+        return created;
+    }
+
+    public void setCreated(Timestamp created) {
+        this.created = created;
+    }
+
+    public Timestamp getChanged() {
+        return changed;
+    }
+
+    public void setChanged(Timestamp changed) {
+        this.changed = changed;
+    }
+
+    public Long getLocationId() {
+        return locationId;
+    }
+
+    public void setLocationId(Long locationId) {
+        this.locationId = locationId;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -66,12 +116,17 @@ public class User {
                 Objects.equals(firstName, user.firstName) &&
                 Objects.equals(lastName, user.lastName) &&
                 Objects.equals(phoneNumber, user.phoneNumber) &&
-                Objects.equals(passportData, user.passportData);
+                Objects.equals(passportData, user.passportData) &&
+                Objects.equals(login, user.login) &&
+                Objects.equals(password, user.password) &&
+                Objects.equals(created, user.created) &&
+                Objects.equals(changed, user.changed) &&
+                Objects.equals(locationId, user.locationId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, firstName, lastName, phoneNumber, passportData);
+        return Objects.hash(id, firstName, lastName, phoneNumber, passportData, login, password, created, changed, locationId);
     }
 
     @Override
@@ -82,6 +137,11 @@ public class User {
                 ", lastName='" + lastName + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", passportData='" + passportData + '\'' +
+                ", login='" + login + '\'' +
+                ", password='" + password + '\'' +
+                ", created=" + created +
+                ", changed=" + changed +
+                ", locationId=" + locationId +
                 '}';
     }
 }

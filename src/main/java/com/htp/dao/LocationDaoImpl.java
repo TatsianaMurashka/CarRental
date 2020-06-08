@@ -3,6 +3,7 @@ package com.htp.dao;
 import com.htp.domain.Location;
 import com.htp.exeptions.ResourceNotFoundException;
 import com.htp.util.DatabaseConfiguration;
+import org.springframework.stereotype.Component;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -11,12 +12,16 @@ import java.util.Optional;
 
 import static com.htp.util.DatabaseConfiguration.*;
 
+@Component("locationDaoImpl")
 public class LocationDaoImpl implements LocationDao {
     public static DatabaseConfiguration config = DatabaseConfiguration.getInstance();
 
     public static final String LOCATION_ID = "id";
     public static final String COUNTRY = "country";
     public static final String CITY = "city";
+    public static final String STREET = "street";
+    public static final String HOUSE = "house";
+    public static final String APARTMENT = "apartment";
 
     @Override
     public List<Location> findAll() {
@@ -93,8 +98,8 @@ public class LocationDaoImpl implements LocationDao {
 
     @Override
     public Location save(Location location) {
-        final String insertQuery = "insert into m_location (country, city)\n" +
-                " values (?, ?)";
+        final String insertQuery = "insert into m_location (country, city, street, house, apartment)\n" +
+                " values (?, ?, ?, ?, ?)";
 
         String driverName = config.getProperty(DATABASE_DRIVER_NAME);
         String url = config.getProperty(DATABASE_URL);
@@ -113,6 +118,9 @@ public class LocationDaoImpl implements LocationDao {
         ) {
             preparedStatement.setString(1, location.getCountry());
             preparedStatement.setString(2, location.getCity());
+            preparedStatement.setString(3, location.getStreet());
+            preparedStatement.setString(4, location.getHouse());
+            preparedStatement.setString(5, location.getApartment());
 
             preparedStatement.executeUpdate();
 
@@ -128,7 +136,7 @@ public class LocationDaoImpl implements LocationDao {
 
     @Override
     public Location update(Location location) {
-        final String updateQuery = "update m_location set country = ?, city = ?" +
+        final String updateQuery = "update m_location set country = ?, city = ?, street = ?, house = ?, apartment = ?" +
                 "where id = ?";
 
         String driverName = config.getProperty(DATABASE_DRIVER_NAME);
@@ -147,8 +155,11 @@ public class LocationDaoImpl implements LocationDao {
         ) {
             preparedStatement.setString(1, location.getCountry());
             preparedStatement.setString(2, location.getCity());
+            preparedStatement.setString(3, location.getStreet());
+            preparedStatement.setString(4, location.getHouse());
+            preparedStatement.setString(5, location.getApartment());
 
-            preparedStatement.setLong(3, location.getId());
+            preparedStatement.setLong(6, location.getId());
 
             preparedStatement.executeUpdate();
 
@@ -189,6 +200,9 @@ public class LocationDaoImpl implements LocationDao {
         location.setId(resultSet.getLong(LOCATION_ID));
         location.setCountry(resultSet.getString(COUNTRY));
         location.setCity(resultSet.getString(CITY));
+        location.setStreet(resultSet.getString(STREET));
+        location.setHouse(resultSet.getString(HOUSE));
+        location.setApartment(resultSet.getString(APARTMENT));
 
         return location;
     }

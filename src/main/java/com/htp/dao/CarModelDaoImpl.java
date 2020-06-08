@@ -120,7 +120,7 @@ public class CarModelDaoImpl implements CarModelDao {
                 preparedStatement.setString(3, carModel.getColor());
                 preparedStatement.setInt(4, carModel.getCapacity());
                 preparedStatement.setString(5, carModel.getTransmission());
-                preparedStatement.setString(6, carModel.getFuel_type());
+                preparedStatement.setString(6, carModel.getFuelType());
 
                 preparedStatement.addBatch();
             }
@@ -131,7 +131,6 @@ public class CarModelDaoImpl implements CarModelDao {
             throw new RuntimeException("Some issues in insert operation!", e);
         }
     }
-
 
     @Override
     public CarModel save(CarModel carModel) {
@@ -158,7 +157,7 @@ public class CarModelDaoImpl implements CarModelDao {
             preparedStatement.setString(3, carModel.getColor());
             preparedStatement.setInt(4, carModel.getCapacity());
             preparedStatement.setString(5, carModel.getTransmission());
-            preparedStatement.setString(6, carModel.getFuel_type());
+            preparedStatement.setString(6, carModel.getFuelType());
 
             preparedStatement.executeUpdate();
 
@@ -197,7 +196,7 @@ public class CarModelDaoImpl implements CarModelDao {
             preparedStatement.setString(3, carModel.getColor());
             preparedStatement.setInt(4, carModel.getCapacity());
             preparedStatement.setString(5, carModel.getTransmission());
-            preparedStatement.setString(6, carModel.getFuel_type());
+            preparedStatement.setString(6, carModel.getFuelType());
 
             preparedStatement.setLong(7, carModel.getId());
 
@@ -243,7 +242,7 @@ public class CarModelDaoImpl implements CarModelDao {
         carModel.setColor(resultSet.getString(CAR_COLOR));
         carModel.setCapacity(resultSet.getInt(CAR_CAPACITY));
         carModel.setTransmission(resultSet.getString(CAR_TRANSMISSION));
-        carModel.setFuel_type(resultSet.getString(CAR_FUEL_TYPE));
+        carModel.setFuelType(resultSet.getString(CAR_FUEL_TYPE));
         return carModel;
     }
 }

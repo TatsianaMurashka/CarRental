@@ -9,6 +9,12 @@ public class Location {
 
     private String city;
 
+    private String street;
+
+    private String house;
+
+    private String apartment;
+
     public Location() {
     }
 
@@ -36,6 +42,30 @@ public class Location {
         this.city = city;
     }
 
+    public String getStreet() {
+        return street;
+    }
+
+    public void setStreet(String street) {
+        this.street = street;
+    }
+
+    public String getHouse() {
+        return house;
+    }
+
+    public void setHouse(String house) {
+        this.house = house;
+    }
+
+    public String getApartment() {
+        return apartment;
+    }
+
+    public void setApartment(String apartment) {
+        this.apartment = apartment;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -43,12 +73,15 @@ public class Location {
         Location location = (Location) o;
         return Objects.equals(id, location.id) &&
                 Objects.equals(country, location.country) &&
-                Objects.equals(city, location.city);
+                Objects.equals(city, location.city) &&
+                Objects.equals(street, location.street) &&
+                Objects.equals(house, location.house) &&
+                Objects.equals(apartment, location.apartment);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, country, city);
+        return Objects.hash(id, country, city, street, house, apartment);
     }
 
     @Override
@@ -57,6 +90,9 @@ public class Location {
                 "id=" + id +
                 ", country='" + country + '\'' +
                 ", city='" + city + '\'' +
+                ", street='" + street + '\'' +
+                ", house='" + house + '\'' +
+                ", apartment='" + apartment + '\'' +
                 '}';
     }
 }

@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -66,6 +67,11 @@ public class FrontController extends HttpServlet {
                         user.setLastName(userName);
                         user.setPhoneNumber(UUID.randomUUID().toString());
                         user.setPassportData(UUID.randomUUID().toString());
+                        user.setLogin(UUID.randomUUID().toString());
+                        user.setPassword(UUID.randomUUID().toString());
+                        user.setCreated(new Timestamp(new Date().getTime()));
+                        user.setChanged(new Timestamp(new Date().getTime()));
+                        user.setLocationId(4L);
 
                         result = userDao.save(user).getPassportData();
                         break;
@@ -125,7 +131,7 @@ public class FrontController extends HttpServlet {
                         carModel.setColor("Red");
                         carModel.setCapacity(new Random().nextInt(4) + 2);
                         carModel.setTransmission("");
-                        carModel.setFuel_type("");
+                        carModel.setFuelType("");
 
                         result = carDao.save(carModel).getBrand();
                         break;
@@ -181,6 +187,9 @@ public class FrontController extends HttpServlet {
                         Location location = new Location();
                         location.setCountry(country);
                         location.setCity(city);
+                        location.setStreet("");
+                        location.setHouse("");
+                        location.setApartment("");
 
                         result = locationDao.save(location).getCity();
                         break;
@@ -231,7 +240,7 @@ public class FrontController extends HttpServlet {
                     carModel.setColor("Red");
                     carModel.setCapacity(new Random().nextInt(4) + 2);
                     carModel.setTransmission("");
-                    carModel.setFuel_type("");
+                    carModel.setFuelType("");
 
                     carModels.add(carModel);
                 }

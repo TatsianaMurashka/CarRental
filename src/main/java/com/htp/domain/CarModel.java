@@ -15,7 +15,7 @@ public class CarModel {
 
     private String transmission;
 
-    private String fuel_type;
+    private String fuelType;
 
     public CarModel() {
     }
@@ -68,12 +68,12 @@ public class CarModel {
         this.transmission = transmission;
     }
 
-    public String getFuel_type() {
-        return fuel_type;
+    public String getFuelType() {
+        return fuelType;
     }
 
-    public void setFuel_type(String fuel_type) {
-        this.fuel_type = fuel_type;
+    public void setFuelType(String fuelType) {
+        this.fuelType = fuelType;
     }
 
     @Override
@@ -87,12 +87,12 @@ public class CarModel {
                 Objects.equals(color, carModel.color) &&
                 Objects.equals(capacity, carModel.capacity) &&
                 Objects.equals(transmission, carModel.transmission) &&
-                Objects.equals(fuel_type, carModel.fuel_type);
+                Objects.equals(fuelType, carModel.fuelType);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, brand, model, color, capacity, transmission, fuel_type);
+        return Objects.hash(id, brand, model, color, capacity, transmission, fuelType);
     }
 
     @Override
@@ -104,7 +104,7 @@ public class CarModel {
                 ", color='" + color + '\'' +
                 ", capacity='" + capacity + '\'' +
                 ", transmission='" + transmission + '\'' +
-                ", fuel_type='" + fuel_type + '\'' +
+                ", fuel_type='" + fuelType + '\'' +
                 '}';
     }
 }

@@ -19,6 +19,11 @@ public class UserDaoImpl implements UserDao {
     public static final String USER_LAST_NAME = "last_name";
     public static final String USER_PHONE_NUMBER = "phone_number";
     public static final String USER_PASSPORT_DATA = "passport_data";
+    public static final String USER_LOGIN = "login";
+    public static final String USER_PASSWORD = "password";
+    public static final String USER_CREATED = "created";
+    public static final String USER_CHANGED = "changed";
+    public static final String USER_LOCATION = "location_id";
 
     @Override
     public List<User> findAll() {
@@ -95,8 +100,8 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public User save(User user) {
-        final String insertQuery = "insert into m_users (first_name, last_name, phone_number, passport_data)\n" +
-                " values (?, ?, ?, ?)";
+        final String insertQuery = "insert into m_users (first_name, last_name, phone_number, passport_data, login, password, created, changed, location_id)\n" +
+                " values (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         String driverName = config.getProperty(DATABASE_DRIVER_NAME);
         String url = config.getProperty(DATABASE_URL);
@@ -118,6 +123,11 @@ public class UserDaoImpl implements UserDao {
             preparedStatement.setString(2, user.getLastName());
             preparedStatement.setString(3, user.getPhoneNumber());
             preparedStatement.setString(4, user.getPassportData());
+            preparedStatement.setString(5, user.getLogin());
+            preparedStatement.setString(6, user.getPassword());
+            preparedStatement.setTimestamp(7, user.getCreated());
+            preparedStatement.setTimestamp(8, user.getChanged());
+            preparedStatement.setLong(9, user.getLocationId());
 
             preparedStatement.executeUpdate();
 
@@ -154,7 +164,12 @@ public class UserDaoImpl implements UserDao {
             preparedStatement.setString(2, user.getLastName());
             preparedStatement.setString(3, user.getPhoneNumber());
             preparedStatement.setString(4, user.getPassportData());
-            preparedStatement.setLong(5, user.getId());
+            preparedStatement.setString(5, user.getLogin());
+            preparedStatement.setString(6, user.getPassword());
+            preparedStatement.setTimestamp(7, user.getCreated());
+            preparedStatement.setTimestamp(8, user.getChanged());
+            preparedStatement.setLong(8, user.getLocationId());
+            preparedStatement.setLong(9, user.getId());
 
             preparedStatement.executeUpdate();
 
