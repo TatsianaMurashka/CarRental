@@ -1,5 +1,6 @@
-package com.htp.dao;
+package com.htp.dao.jdbc;
 
+import com.htp.dao.CarModelDao;
 import com.htp.domain.CarModel;
 import com.htp.exeptions.ResourceNotFoundException;
 import com.htp.util.DatabaseConfiguration;

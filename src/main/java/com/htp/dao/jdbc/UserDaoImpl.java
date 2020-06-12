@@ -1,9 +1,9 @@
-package com.htp.dao;
+package com.htp.dao.jdbc;
 
-import com.htp.domain.Location;
+import com.htp.dao.UserDao;
+import com.htp.domain.User;
 import com.htp.exeptions.ResourceNotFoundException;
 import com.htp.util.DatabaseConfiguration;
-import org.springframework.stereotype.Component;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -12,20 +12,23 @@ import java.util.Optional;
 
 import static com.htp.util.DatabaseConfiguration.*;
 
-@Component("locationDaoImpl")
-public class LocationDaoImpl implements LocationDao {
+public class UserDaoImpl implements UserDao {
     public static DatabaseConfiguration config = DatabaseConfiguration.getInstance();
 
-    public static final String LOCATION_ID = "id";
-    public static final String COUNTRY = "country";
-    public static final String CITY = "city";
-    public static final String STREET = "street";
-    public static final String HOUSE = "house";
-    public static final String APARTMENT = "apartment";
+    public static final String USER_ID = "id";
+    public static final String USER_FIRST_NAME = "first_name";
+    public static final String USER_LAST_NAME = "last_name";
+    public static final String USER_PHONE_NUMBER = "phone_number";
+    public static final String USER_PASSPORT_DATA = "passport_data";
+    public static final String USER_LOGIN = "login";
+    public static final String USER_PASSWORD = "password";
+    public static final String USER_CREATED = "created";
+    public static final String USER_CHANGED = "changed";
+    public static final String USER_LOCATION = "location_id";
 
     @Override
-    public List<Location> findAll() {
-        final String findAllQuery = "select * from m_location order by id desc";
+    public List<User> findAll() {
+        final String findAllQuery = "select * from m_users order by id desc";
 
         String driverName = config.getProperty(DATABASE_DRIVER_NAME);
         String url = config.getProperty(DATABASE_URL);
@@ -38,7 +41,7 @@ public class LocationDaoImpl implements LocationDao {
             System.out.println("Don't worry:)");
         }
 
-        List<Location> resultList = new ArrayList<>();
+        List<User> resultList = new ArrayList<>();
         try (Connection connection = DriverManager.getConnection(url, login, databasePassword);
              PreparedStatement preparedStatement = connection.prepareStatement(findAllQuery)) {
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -52,13 +55,13 @@ public class LocationDaoImpl implements LocationDao {
     }
 
     @Override
-    public Optional<Location> findById(Long locationId) {
-        return Optional.ofNullable(findOne(locationId));
+    public Optional<User> findById(Long userId) {
+        return Optional.ofNullable(findOne(userId));
     }
 
     @Override
-    public Location findOne(Long locationId) {
-        final String findByIdQuery = "select * from m_location where id = ?";
+    public User findOne(Long userId) {
+        final String findById = "select * from m_users where id = ?";
 
         String driverName = config.getProperty(DATABASE_DRIVER_NAME);
         String url = config.getProperty(DATABASE_URL);
@@ -71,18 +74,18 @@ public class LocationDaoImpl implements LocationDao {
             System.out.println("Don't worry:)");
         }
 
-        Location location = null;
+        User user = null;
         ResultSet resultSet = null;
         try (Connection connection = DriverManager.getConnection(url, login, databasePassword);
-             PreparedStatement preparedStatement = connection.prepareStatement(findByIdQuery);
+             PreparedStatement preparedStatement = connection.prepareStatement(findById);
         ) {
-            preparedStatement.setLong(1, locationId);
+            preparedStatement.setLong(1, userId);
             resultSet = preparedStatement.executeQuery();
 
             if (resultSet.next()) {
-                location = parseResultSet(resultSet);
+                user = parseResultSet(resultSet);
             } else {
-                throw new ResourceNotFoundException("Location with id " + locationId + "not found");
+                throw new ResourceNotFoundException("User with id " + userId + "not found");
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -93,13 +96,13 @@ public class LocationDaoImpl implements LocationDao {
                 System.out.println(throwables.getMessage());
             }
         }
-        return location;
+        return user;
     }
 
     @Override
-    public Location save(Location location) {
-        final String insertQuery = "insert into m_location (country, city, street, house, apartment)\n" +
-                " values (?, ?, ?, ?, ?)";
+    public User save(User user) {
+        final String insertQuery = "insert into m_users (first_name, last_name, phone_number, passport_data, login, password, created, changed, location_id)\n" +
+                " values (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         String driverName = config.getProperty(DATABASE_DRIVER_NAME);
         String url = config.getProperty(DATABASE_URL);
@@ -113,21 +116,26 @@ public class LocationDaoImpl implements LocationDao {
         }
 
         try (Connection connection = DriverManager.getConnection(url, login, databasePassword);
+                /*3. Get statement from connection*/
              PreparedStatement preparedStatement = connection.prepareStatement(insertQuery);
-             PreparedStatement lastInsertId = connection.prepareStatement("SELECT currval('m_location_id_seq') as last_insert_id;")
+             PreparedStatement lastInsertId = connection.prepareStatement("SELECT currval('m_customers_id_seq') as last_insert_id;")
         ) {
-            preparedStatement.setString(1, location.getCountry());
-            preparedStatement.setString(2, location.getCity());
-            preparedStatement.setString(3, location.getStreet());
-            preparedStatement.setString(4, location.getHouse());
-            preparedStatement.setString(5, location.getApartment());
+            preparedStatement.setString(1, user.getFirstName());
+            preparedStatement.setString(2, user.getLastName());
+            preparedStatement.setString(3, user.getPhoneNumber());
+            preparedStatement.setString(4, user.getPassportData());
+            preparedStatement.setString(5, user.getLogin());
+            preparedStatement.setString(6, user.getPassword());
+            preparedStatement.setTimestamp(7, user.getCreated());
+            preparedStatement.setTimestamp(8, user.getChanged());
+            preparedStatement.setLong(9, user.getLocationId());
 
             preparedStatement.executeUpdate();
 
             ResultSet set = lastInsertId.executeQuery();
             set.next();
-            long insertedCarModelId = set.getInt("last_insert_id");
-            return findOne(insertedCarModelId);
+            long insertedUserId = set.getInt("last_insert_id");
+            return findOne(insertedUserId);
 
         } catch (SQLException e) {
             throw new RuntimeException("Some issues in insert operation!", e);
@@ -135,8 +143,8 @@ public class LocationDaoImpl implements LocationDao {
     }
 
     @Override
-    public Location update(Location location) {
-        final String updateQuery = "update m_location set country = ?, city = ?, street = ?, house = ?, apartment = ?" +
+    public User update(User user) {
+        final String updateQuery = "update m_users set first_name = ?, last_name = ?, phone_number = ?, passport_data = ?" +
                 "where id = ?";
 
         String driverName = config.getProperty(DATABASE_DRIVER_NAME);
@@ -153,17 +161,20 @@ public class LocationDaoImpl implements LocationDao {
         try (Connection connection = DriverManager.getConnection(url, login, databasePassword);
              PreparedStatement preparedStatement = connection.prepareStatement(updateQuery);
         ) {
-            preparedStatement.setString(1, location.getCountry());
-            preparedStatement.setString(2, location.getCity());
-            preparedStatement.setString(3, location.getStreet());
-            preparedStatement.setString(4, location.getHouse());
-            preparedStatement.setString(5, location.getApartment());
-
-            preparedStatement.setLong(6, location.getId());
+            preparedStatement.setString(1, user.getFirstName());
+            preparedStatement.setString(2, user.getLastName());
+            preparedStatement.setString(3, user.getPhoneNumber());
+            preparedStatement.setString(4, user.getPassportData());
+            preparedStatement.setString(5, user.getLogin());
+            preparedStatement.setString(6, user.getPassword());
+            preparedStatement.setTimestamp(7, user.getCreated());
+            preparedStatement.setTimestamp(8, user.getChanged());
+            preparedStatement.setLong(8, user.getLocationId());
+            preparedStatement.setLong(9, user.getId());
 
             preparedStatement.executeUpdate();
 
-            return findOne(location.getId());
+            return findOne(user.getId());
 
         } catch (SQLException e) {
             throw new RuntimeException("Some issues in insert operation!: " + e.getMessage(), e);
@@ -171,8 +182,8 @@ public class LocationDaoImpl implements LocationDao {
     }
 
     @Override
-    public int delete(Long locationId) {
-        final String deleteQuery = "delete from m_location where id = ?";
+    public int delete(Long userId) {
+        final String deleteQuery = "delete from m_users where id = ?";
 
         String driverName = config.getProperty(DATABASE_DRIVER_NAME);
         String url = config.getProperty(DATABASE_URL);
@@ -188,22 +199,25 @@ public class LocationDaoImpl implements LocationDao {
         try (Connection connection = DriverManager.getConnection(url, login, databasePassword);
              PreparedStatement preparedStatement = connection.prepareStatement(deleteQuery);
         ) {
-            preparedStatement.setLong(1, locationId);
+            preparedStatement.setLong(1, userId);
             return preparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException("Some issues in insert operation!: " + e.getMessage(), e);
         }
     }
 
-    private Location parseResultSet(ResultSet resultSet) throws SQLException {
-        Location location = new Location();
-        location.setId(resultSet.getLong(LOCATION_ID));
-        location.setCountry(resultSet.getString(COUNTRY));
-        location.setCity(resultSet.getString(CITY));
-        location.setStreet(resultSet.getString(STREET));
-        location.setHouse(resultSet.getString(HOUSE));
-        location.setApartment(resultSet.getString(APARTMENT));
-
-        return location;
+    private User parseResultSet(ResultSet resultSet) throws SQLException {
+        User user = new User();
+        user.setId(resultSet.getLong(USER_ID));
+        user.setFirstName(resultSet.getString(USER_FIRST_NAME));
+        user.setLastName(resultSet.getString(USER_LAST_NAME));
+        user.setPhoneNumber(resultSet.getString(USER_PHONE_NUMBER));
+        user.setPassportData(resultSet.getString(USER_PASSPORT_DATA));
+        user.setLogin(resultSet.getString(USER_LOGIN));
+        user.setPassword(resultSet.getString(USER_PASSWORD));
+        user.setCreated(resultSet.getTimestamp(USER_CREATED));
+        user.setChanged(resultSet.getTimestamp(USER_CHANGED));
+        user.setLocationId(resultSet.getLong(USER_LOCATION));
+        return user;
     }
 }
