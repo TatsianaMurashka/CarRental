@@ -24,6 +24,18 @@ public class User {
 
     private Long locationId;
 
+    public User(String firstName, String lastName, String phoneNumber, String passportData, String login, String password, Timestamp created, Timestamp changed, Long locationId) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phoneNumber = phoneNumber;
+        this.passportData = passportData;
+        this.login = login;
+        this.password = password;
+        this.created = created;
+        this.changed = changed;
+        this.locationId = locationId;
+    }
+
     public User() {
     }
 

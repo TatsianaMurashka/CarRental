@@ -18,6 +18,14 @@ public class Location {
     public Location() {
     }
 
+    public Location(String country, String city, String street, String house, String apartment) {
+        this.country = country;
+        this.city = city;
+        this.street = street;
+        this.house = house;
+        this.apartment = apartment;
+    }
+
     public Long getId() {
         return id;
     }
