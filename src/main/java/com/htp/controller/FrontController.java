@@ -82,9 +82,7 @@ public class FrontController extends HttpServlet {
                         result = userDao.update(userForUpdate).getPassportData();
                         break;
                     case DELETE:
-                        User userForDelete = userDao.findOne(Long.parseLong(userSearchQuery));
-
-                        result = "Delete Result: " + userDao.delete(userForDelete);
+                        result = "Delete Result: " + userDao.delete(Long.parseLong(userSearchQuery));
                         break;
                     case FIND_ALL:
                     default:
@@ -200,9 +198,7 @@ public class FrontController extends HttpServlet {
                         result = locationDao.update(locationForUpdate).getCity();
                         break;
                     case DELETE:
-                        Location locationForDelete = locationDao.findOne(Long.parseLong(locationSearchQuery));
-
-                        result = "Delete Result: " + locationDao.delete(locationForDelete);
+                        result = "Delete Result: " + locationDao.delete(Long.parseLong(locationSearchQuery));
                         break;
                     case FIND_ALL:
                     default:

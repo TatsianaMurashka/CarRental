@@ -171,7 +171,7 @@ public class LocationDaoImpl implements LocationDao {
     }
 
     @Override
-    public int delete(Location location) {
+    public int delete(Long locationId) {
         final String deleteQuery = "delete from m_location where id = ?";
 
         String driverName = config.getProperty(DATABASE_DRIVER_NAME);
@@ -188,7 +188,7 @@ public class LocationDaoImpl implements LocationDao {
         try (Connection connection = DriverManager.getConnection(url, login, databasePassword);
              PreparedStatement preparedStatement = connection.prepareStatement(deleteQuery);
         ) {
-            preparedStatement.setLong(1, location.getId());
+            preparedStatement.setLong(1, locationId);
             return preparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException("Some issues in insert operation!: " + e.getMessage(), e);

@@ -181,7 +181,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public int delete(User user) {
+    public int delete(Long userId) {
         final String deleteQuery = "delete from m_users where id = ?";
 
         String driverName = config.getProperty(DATABASE_DRIVER_NAME);
@@ -198,7 +198,7 @@ public class UserDaoImpl implements UserDao {
         try (Connection connection = DriverManager.getConnection(url, login, databasePassword);
              PreparedStatement preparedStatement = connection.prepareStatement(deleteQuery);
         ) {
-            preparedStatement.setLong(1, user.getId());
+            preparedStatement.setLong(1, userId);
             return preparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException("Some issues in insert operation!: " + e.getMessage(), e);
@@ -212,6 +212,11 @@ public class UserDaoImpl implements UserDao {
         user.setLastName(resultSet.getString(USER_LAST_NAME));
         user.setPhoneNumber(resultSet.getString(USER_PHONE_NUMBER));
         user.setPassportData(resultSet.getString(USER_PASSPORT_DATA));
+        user.setLogin(resultSet.getString(USER_LOGIN));
+        user.setPassword(resultSet.getString(USER_PASSWORD));
+        user.setCreated(resultSet.getTimestamp(USER_CREATED));
+        user.setChanged(resultSet.getTimestamp(USER_CHANGED));
+        user.setLocationId(resultSet.getLong(USER_LOCATION));
         return user;
     }
 }

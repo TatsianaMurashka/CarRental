@@ -17,5 +17,5 @@ public interface LocationDao {
 
     Location update(Location location);
 
-    int delete(Location location);
+    int delete(Long locationId);
 }
