@@ -6,6 +6,7 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StopWatch;
 
@@ -15,7 +16,8 @@ public class LogAspect {
 
     private static final Logger log = Logger.getLogger(LogAspect.class);
 
-    private StopWatch watch = new StopWatch();
+    @Autowired
+    private StopWatch watch;
 
     @Pointcut("execution(* com.htp.dao..*(..))")
     public void aroundRepositoryPointcut() {
