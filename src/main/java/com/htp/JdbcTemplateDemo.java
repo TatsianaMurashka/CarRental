@@ -4,18 +4,29 @@ import com.htp.dao.LocationDao;
 import com.htp.dao.UserDao;
 import com.htp.domain.Location;
 import com.htp.domain.User;
+import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class JdbcTemplateDemo {
+    private static final Logger log = Logger.getLogger(JdbcTemplateDemo.class);
+
+    public static Map<String, Integer> methodsCount = new HashMap<>();
+
     public static void main(String[] args) {
 
         ApplicationContext context = new AnnotationConfigApplicationContext("com.htp");
         testUser(context);
         testLocation(context);
+
+        methodsCount.entrySet().forEach(entry -> {
+            log.info(entry.getKey() + " " + entry.getValue());
+        });
     }
 
     public static void testUser(ApplicationContext context) {
@@ -35,7 +46,7 @@ public class JdbcTemplateDemo {
                 new Timestamp(new Date().getTime()),
                 4L));
 
-        System.out.println(newUser);
+        log.info(newUser.getLogin());
 
         System.out.println(userRepositoryJdbcTemplate.findOne(newUser.getId()));
 
