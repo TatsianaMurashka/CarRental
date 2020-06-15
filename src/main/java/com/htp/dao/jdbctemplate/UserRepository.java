@@ -9,7 +9,6 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Types;
 import java.util.List;
 import java.util.Optional;
 
@@ -55,25 +54,18 @@ public class UserRepository implements UserDao {
     @Override
     public User save(User user) {
         final String insertQuery = "insert into m_users (first_name, last_name, phone_number, passport_data, login, password, created, changed, location_id)\n" +
-                " values (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                " values (:first_name, :last_name, :phone_number, :passport_data, :login, :password, :created, :changed, :location_id)";
         final String findLastIdQuery = "SELECT currval('m_customers_id_seq') as last_insert_id";
 
-        Object[] params = new Object[]{user.getFirstName(), user.getLastName(), user.getPhoneNumber(),
-                user.getPassportData(), user.getLogin(), user.getPassword(),
-                user.getCreated(), user.getChanged(), user.getLocationId()};
-        int[] types = new int[]
-                {
-                        Types.VARCHAR,
-                        Types.VARCHAR,
-                        Types.VARCHAR,
-                        Types.VARCHAR,
-                        Types.VARCHAR,
-                        Types.VARCHAR,
-                        Types.TIMESTAMP,
-                        Types.TIMESTAMP,
-                        Types.BIGINT,
-                };
-        jdbcTemplate.update(insertQuery, params, types);
+        namedParameterJdbcTemplate.update(insertQuery, new MapSqlParameterSource("first_name", user.getFirstName())
+                .addValue("last_name", user.getLastName())
+                .addValue("phone_number", user.getPhoneNumber())
+                .addValue("passport_data", user.getPassportData())
+                .addValue("login", user.getLogin())
+                .addValue("password", user.getPassword())
+                .addValue("created", user.getCreated())
+                .addValue("changed", user.getChanged())
+                .addValue("location_id", user.getLocationId()));
 
         long lastId = jdbcTemplate.queryForObject(findLastIdQuery, Long.class);
 
@@ -82,20 +74,14 @@ public class UserRepository implements UserDao {
 
     @Override
     public User update(User user) {
-        final String updateQuery = "update m_users set first_name = ?, last_name = ?, phone_number = ?, passport_data = ?" +
-                "where id = ?";
+        final String updateQuery = "update m_users set first_name = :first_name, last_name = :last_name, phone_number = :phone_number, passport_data = :passport_data" +
+                " where id = :id";
 
-        Object[] params = new Object[]{user.getFirstName(), user.getLastName(), user.getPhoneNumber(),
-                user.getPassportData(), user.getId()};
-        int[] types = new int[]
-                {
-                        Types.VARCHAR,
-                        Types.VARCHAR,
-                        Types.VARCHAR,
-                        Types.VARCHAR,
-                        Types.BIGINT,
-                };
-        jdbcTemplate.update(updateQuery, params, types);
+        namedParameterJdbcTemplate.update(updateQuery, new MapSqlParameterSource("first_name", user.getFirstName())
+                .addValue("last_name", user.getLastName())
+                .addValue("phone_number", user.getPhoneNumber())
+                .addValue("passport_data", user.getPassportData())
+                .addValue("id", user.getId()));
 
         return findOne(user.getId());
     }

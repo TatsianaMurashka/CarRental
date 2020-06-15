@@ -9,7 +9,6 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Types;
 import java.util.List;
 import java.util.Optional;
 
@@ -44,27 +43,21 @@ public class LocationRepository implements LocationDao {
 
     @Override
     public Location findOne(Long locationId) {
-        final String findById = "select * from m_location where id = :locationId";
-        return namedParameterJdbcTemplate.queryForObject(findById, new MapSqlParameterSource("locationId", locationId), this::userRowMapper);
+        final String findById = "select * from m_location where id = :id";
+        return namedParameterJdbcTemplate.queryForObject(findById, new MapSqlParameterSource("id", locationId), this::userRowMapper);
     }
 
     @Override
     public Location save(Location location) {
         final String insertQuery = "insert into m_location (country, city, street, house, apartment)\n" +
-                " values (?, ?, ?, ?, ?)";
+                " values (:country, :city, :street, :house, :apartment)";
         final String findLastIdQuery = "SELECT currval('m_location_id_seq') as last_insert_id";
 
-        Object[] params = new Object[]{location.getCountry(), location.getCity(),
-                location.getStreet(), location.getHouse(), location.getApartment()};
-        int[] types = new int[]
-                {
-                        Types.VARCHAR,
-                        Types.VARCHAR,
-                        Types.VARCHAR,
-                        Types.VARCHAR,
-                        Types.VARCHAR,
-                };
-        jdbcTemplate.update(insertQuery, params, types);
+        namedParameterJdbcTemplate.update(insertQuery, new MapSqlParameterSource("country", location.getCountry())
+                .addValue("city", location.getCity())
+                .addValue("street", location.getStreet())
+                .addValue("house", location.getHouse())
+                .addValue("apartment", location.getApartment()));
 
         long lastId = jdbcTemplate.queryForObject(findLastIdQuery, Long.class);
 
@@ -73,15 +66,10 @@ public class LocationRepository implements LocationDao {
 
     @Override
     public Location update(Location location) {
-        final String updateQuery = "update m_location set city = ? where id = ?";
+        final String updateQuery = "update m_location set city = :city where id = :id";
 
-        Object[] params = new Object[]{location.getCity(), location.getId()};
-        int[] types = new int[]
-                {
-                        Types.VARCHAR,
-                        Types.BIGINT,
-                };
-        jdbcTemplate.update(updateQuery, params, types);
+        namedParameterJdbcTemplate.update(updateQuery, new MapSqlParameterSource("city", location.getCity())
+                .addValue("id", location.getId()));
 
         return findOne(location.getId());
     }

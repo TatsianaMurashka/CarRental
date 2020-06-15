@@ -51,7 +51,7 @@ public class JdbcTemplateDemo {
         System.out.println(userRepositoryJdbcTemplate.findOne(newUser.getId()));
 
         User userToUpdate = userRepositoryJdbcTemplate.findOne(newUser.getId());
-        userToUpdate.setFirstName("New User first name");
+        userToUpdate.setFirstName("New first name");
         System.out.println(userRepositoryJdbcTemplate.update(userToUpdate));
 
         System.out.println(userRepositoryJdbcTemplate.delete(newUser.getId()) + " row(s) deleted");
@@ -64,11 +64,11 @@ public class JdbcTemplateDemo {
             System.out.println(location);
         }
 
-        Location newLocation = locationRepositoryJdbcTemplate.save(new Location("",
-                "",
-                "",
-                "",
-                ""));
+        Location newLocation = locationRepositoryJdbcTemplate.save(new Location("SaveCountry",
+                "SaveCity",
+                "SaveStreet",
+                "SaveHouse",
+                "SaveApt"));
 
         System.out.println(newLocation);
 
