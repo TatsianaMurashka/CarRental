@@ -3,10 +3,12 @@ package com.htp.service;
 import com.htp.dao.LocationDao;
 import com.htp.domain.Location;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class LocationServiceImpl implements LocationService {
 
     private LocationDao locationDao;

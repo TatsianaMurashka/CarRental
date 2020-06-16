@@ -5,5 +5,6 @@
 </head>
 <body>
 Hello, hello!
+${stat}
 </body>
 </html>

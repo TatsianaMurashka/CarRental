@@ -3,10 +3,12 @@ package com.htp.service;
 import com.htp.dao.UserDao;
 import com.htp.domain.User;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class UserServiceImpl implements UserService {
 
     private UserDao userDao;

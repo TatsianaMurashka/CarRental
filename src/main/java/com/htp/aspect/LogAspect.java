@@ -1,6 +1,5 @@
 package com.htp.aspect;
 
-import com.htp.JdbcTemplateDemo;
 import org.apache.log4j.Logger;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -9,17 +8,27 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StopWatch;
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
+
 @Component
 @Aspect
 public class LogAspect {
 
     private static final Logger log = Logger.getLogger(LogAspect.class);
 
-    private StopWatch watch;
+    private static Map<String, Integer> methodInvocations = new ConcurrentHashMap<>();
 
-    public LogAspect(StopWatch watch) {
-        this.watch = watch;
+    public static String showStatistics() {
+        return methodInvocations.entrySet().stream().map(e -> e.getKey() + " " + e.getValue()).collect(Collectors.joining(","));
     }
+
+    public static Map<String, Integer> getMethodInvocations() {
+        return methodInvocations;
+    }
+
+    StopWatch watch = new StopWatch();
 
     @Pointcut("execution(* com.htp.dao..*(..))")
     public void aroundRepositoryPointcut() {
@@ -27,10 +36,9 @@ public class LogAspect {
 
     @Around("aroundRepositoryPointcut()")
     public Object logAroundMethods(ProceedingJoinPoint joinPoint) throws Throwable {
-
         String mapKey = "  " + joinPoint.getSignature().getDeclaringTypeName() + "  " + joinPoint.getSignature().getName();
-        Integer prevValue = JdbcTemplateDemo.methodsCount.get(mapKey);
-        JdbcTemplateDemo.methodsCount.put(mapKey, prevValue == null ? 1 : prevValue + 1);
+        Integer prevValue = methodInvocations.get(mapKey);
+        methodInvocations.put(mapKey, prevValue == null ? 1 : prevValue + 1);
 
         watch.start();
         Object proceed = joinPoint.proceed();

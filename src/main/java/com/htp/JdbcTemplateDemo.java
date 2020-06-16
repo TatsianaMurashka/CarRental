@@ -10,23 +10,15 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 
 import java.sql.Timestamp;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 public class JdbcTemplateDemo {
     private static final Logger log = Logger.getLogger(JdbcTemplateDemo.class);
-
-    public static Map<String, Integer> methodsCount = new HashMap<>();
 
     public static void main(String[] args) {
 
         ApplicationContext context = new AnnotationConfigApplicationContext("com.htp");
         testUser(context);
         testLocation(context);
-
-        methodsCount.entrySet().forEach(entry -> {
-            log.info(entry.getKey() + " " + entry.getValue());
-        });
     }
 
     public static void testUser(ApplicationContext context) {
@@ -64,11 +56,11 @@ public class JdbcTemplateDemo {
             System.out.println(location);
         }
 
-        Location newLocation = locationRepositoryJdbcTemplate.save(new Location("SaveCountry",
-                "SaveCity",
-                "SaveStreet",
-                "SaveHouse",
-                "SaveApt"));
+        Location newLocation = locationRepositoryJdbcTemplate.save(new Location("Country",
+                "City",
+                "",
+                "",
+                ""));
 
         System.out.println(newLocation);
 
