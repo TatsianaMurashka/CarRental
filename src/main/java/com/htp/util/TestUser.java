@@ -8,8 +8,18 @@ public class TestUser {
     private Long id;
     private String name;
     private String surname;
-    private final int MAX_DEPTH = 5;
+    public final int MAX_DEPTH = 5;
     private List<TestUser> friends;
+
+    private static int lastFriendsCount = 0;
+
+    public List<TestUser> getFriends() {
+        return friends;
+    }
+
+    public int getLastFriendsCount() {
+        return lastFriendsCount;
+    }
 
     public TestUser(Long id, String name, String surname) {
         this.id = id;
@@ -23,18 +33,15 @@ public class TestUser {
     }
 
     public void printFriends() {
+        lastFriendsCount = 0;
         printFriends(0);
-    }
-
-    @Override
-    public String toString() {
-        return "{" + "name='" + name + '\'' + '}';
     }
 
     private void printFriends(int currentDepth) {
         if (currentDepth >= MAX_DEPTH) {
             return;
         }
+        lastFriendsCount++;
         String offset = "";
         for (int i = 0; i < currentDepth * 2; i++) {
             offset += ' ';
@@ -43,6 +50,11 @@ public class TestUser {
         for (TestUser friend : friends) {
             friend.printFriends(currentDepth + 1);
         }
+    }
+
+    @Override
+    public String toString() {
+        return "{" + "name='" + name + '\'' + '}';
     }
 
 }
