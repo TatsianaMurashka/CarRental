@@ -118,7 +118,7 @@ public class UserDaoImpl implements UserDao {
         try (Connection connection = DriverManager.getConnection(url, login, databasePassword);
                 /*3. Get statement from connection*/
              PreparedStatement preparedStatement = connection.prepareStatement(insertQuery);
-             PreparedStatement lastInsertId = connection.prepareStatement("SELECT currval('m_customers_id_seq') as last_insert_id;")
+             PreparedStatement lastInsertId = connection.prepareStatement("SELECT currval('m_users_id_seq') as last_insert_id;")
         ) {
             preparedStatement.setString(1, user.getFirstName());
             preparedStatement.setString(2, user.getLastName());

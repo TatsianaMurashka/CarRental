@@ -55,7 +55,7 @@ public class UserRepository implements UserDao {
     public User save(User user) {
         final String insertQuery = "insert into m_users (first_name, last_name, phone_number, passport_data, login, password, created, changed, location_id)\n" +
                 " values (:first_name, :last_name, :phone_number, :passport_data, :login, :password, :created, :changed, :location_id)";
-        final String findLastIdQuery = "SELECT currval('m_customers_id_seq') as last_insert_id";
+        final String findLastIdQuery = "SELECT currval('m_users_id_seq') as last_insert_id";
 
         namedParameterJdbcTemplate.update(insertQuery, new MapSqlParameterSource("first_name", user.getFirstName())
                 .addValue("last_name", user.getLastName())

@@ -1,6 +1,9 @@
 package com.htp.controller;
 
 import com.htp.dao.*;
+import com.htp.dao.jdbc.CarModelDaoImpl;
+import com.htp.dao.jdbc.LocationDaoImpl;
+import com.htp.dao.jdbc.UserDaoImpl;
 import com.htp.domain.CarModel;
 import com.htp.domain.Location;
 import com.htp.domain.User;

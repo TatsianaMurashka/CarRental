@@ -1,9 +1,14 @@
 package com.htp.domain;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Objects;
 
-public class User {
+@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
+public class User implements Serializable {
     private Long id;
 
     private String firstName;
@@ -16,6 +21,7 @@ public class User {
 
     private String login;
 
+    @JsonIgnore
     private String password;
 
     private Timestamp created;
