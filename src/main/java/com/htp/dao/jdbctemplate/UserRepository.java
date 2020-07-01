@@ -25,6 +25,7 @@ public class UserRepository implements UserDao {
     public static final String USER_CREATED = "created";
     public static final String USER_CHANGED = "changed";
     public static final String USER_LOCATION = "location_id";
+    public static final String USER_IS_DELETED = "is_deleted";
 
     private JdbcTemplate jdbcTemplate;
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
@@ -52,9 +53,15 @@ public class UserRepository implements UserDao {
     }
 
     @Override
+    public List<User> search(String searchParam) {
+        final String searchQuery = "select * from m_users where login = ? order by id desc";
+        return jdbcTemplate.query(searchQuery, this::userRowMapper, searchParam);
+    }
+
+    @Override
     public User save(User user) {
-        final String insertQuery = "insert into m_users (first_name, last_name, phone_number, passport_data, login, password, created, changed, location_id)\n" +
-                " values (:first_name, :last_name, :phone_number, :passport_data, :login, :password, :created, :changed, :location_id)";
+        final String insertQuery = "insert into m_users (first_name, last_name, phone_number, passport_data, login, password, created, changed, location_id, is_deleted)\n" +
+                " values (:first_name, :last_name, :phone_number, :passport_data, :login, :password, :created, :changed, :location_id, :is_deleted)";
         final String findLastIdQuery = "SELECT currval('m_users_id_seq') as last_insert_id";
 
         namedParameterJdbcTemplate.update(insertQuery, new MapSqlParameterSource("first_name", user.getFirstName())
@@ -65,7 +72,8 @@ public class UserRepository implements UserDao {
                 .addValue("password", user.getPassword())
                 .addValue("created", user.getCreated())
                 .addValue("changed", user.getChanged())
-                .addValue("location_id", user.getLocationId()));
+                .addValue("location_id", user.getLocationId())
+                .addValue("is_deleted", user.isDeleted()));
 
         long lastId = jdbcTemplate.queryForObject(findLastIdQuery, Long.class);
 
@@ -88,7 +96,7 @@ public class UserRepository implements UserDao {
 
     @Override
     public int delete(Long userId) {
-        final String deleteQuery = "delete from m_users where id = ?";
+        final String deleteQuery = "update m_users set is_deleted = true where id = ?";
         return jdbcTemplate.update(deleteQuery, userId);
     }
 
@@ -104,6 +112,8 @@ public class UserRepository implements UserDao {
         user.setCreated(resultSet.getTimestamp(USER_CREATED));
         user.setChanged(resultSet.getTimestamp(USER_CHANGED));
         user.setLocationId(resultSet.getLong(USER_LOCATION));
+        user.setDeleted(resultSet.getBoolean(USER_IS_DELETED));
+        user.setDeleted(resultSet.getBoolean(USER_IS_DELETED));
         return user;
     }
 

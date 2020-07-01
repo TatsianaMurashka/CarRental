@@ -33,6 +33,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<User> search(String searchParam) {
+        return userDao.search(searchParam);
+    }
+
+    @Override
     public User save(User user) {
         return userDao.save(user);
     }

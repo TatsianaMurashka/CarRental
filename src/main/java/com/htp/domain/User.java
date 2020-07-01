@@ -30,7 +30,12 @@ public class User implements Serializable {
 
     private Long locationId;
 
-    public User(String firstName, String lastName, String phoneNumber, String passportData, String login, String password, Timestamp created, Timestamp changed, Long locationId) {
+    private boolean isDeleted;
+
+    public User() {
+    }
+
+    public User(String firstName, String lastName, String phoneNumber, String passportData, String login, String password, Timestamp created, Timestamp changed, Long locationId, boolean isDeleted) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
@@ -40,9 +45,7 @@ public class User implements Serializable {
         this.created = created;
         this.changed = changed;
         this.locationId = locationId;
-    }
-
-    public User() {
+        this.isDeleted = isDeleted;
     }
 
     public Long getId() {
@@ -125,12 +128,21 @@ public class User implements Serializable {
         this.locationId = locationId;
     }
 
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return Objects.equals(id, user.id) &&
+        return isDeleted == user.isDeleted &&
+                Objects.equals(id, user.id) &&
                 Objects.equals(firstName, user.firstName) &&
                 Objects.equals(lastName, user.lastName) &&
                 Objects.equals(phoneNumber, user.phoneNumber) &&
@@ -144,7 +156,7 @@ public class User implements Serializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, firstName, lastName, phoneNumber, passportData, login, password, created, changed, locationId);
+        return Objects.hash(id, firstName, lastName, phoneNumber, passportData, login, password, created, changed, locationId, isDeleted);
     }
 
     @Override
@@ -160,6 +172,7 @@ public class User implements Serializable {
                 ", created=" + created +
                 ", changed=" + changed +
                 ", locationId=" + locationId +
+                ", isDeleted=" + isDeleted +
                 '}';
     }
 }

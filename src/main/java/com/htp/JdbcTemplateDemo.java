@@ -36,7 +36,7 @@ public class JdbcTemplateDemo {
                 "",
                 new Timestamp(new Date().getTime()),
                 new Timestamp(new Date().getTime()),
-                4L));
+                4L, false));
 
         log.info(newUser.getLogin());
 
@@ -60,7 +60,7 @@ public class JdbcTemplateDemo {
                 "City",
                 "",
                 "",
-                ""));
+                "", false));
 
         System.out.println(newLocation);
 

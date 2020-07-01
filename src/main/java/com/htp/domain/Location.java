@@ -15,15 +15,18 @@ public class Location {
 
     private String apartment;
 
+    private boolean isDeleted;
+
     public Location() {
     }
 
-    public Location(String country, String city, String street, String house, String apartment) {
+    public Location(String country, String city, String street, String house, String apartment, boolean isDeleted) {
         this.country = country;
         this.city = city;
         this.street = street;
         this.house = house;
         this.apartment = apartment;
+        this.isDeleted = isDeleted;
     }
 
     public Long getId() {
@@ -74,12 +77,21 @@ public class Location {
         this.apartment = apartment;
     }
 
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Location location = (Location) o;
-        return Objects.equals(id, location.id) &&
+        return isDeleted == location.isDeleted &&
+                Objects.equals(id, location.id) &&
                 Objects.equals(country, location.country) &&
                 Objects.equals(city, location.city) &&
                 Objects.equals(street, location.street) &&
@@ -89,7 +101,7 @@ public class Location {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, country, city, street, house, apartment);
+        return Objects.hash(id, country, city, street, house, apartment, isDeleted);
     }
 
     @Override
@@ -101,6 +113,7 @@ public class Location {
                 ", street='" + street + '\'' +
                 ", house='" + house + '\'' +
                 ", apartment='" + apartment + '\'' +
+                ", isDeleted=" + isDeleted +
                 '}';
     }
 }

@@ -21,6 +21,7 @@ public class LocationRepository implements LocationDao {
     public static final String STREET = "street";
     public static final String HOUSE = "house";
     public static final String APARTMENT = "apartment";
+    public static final String LOCATION_IS_DELETED = "is_deleted";
 
     private JdbcTemplate jdbcTemplate;
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
@@ -48,16 +49,23 @@ public class LocationRepository implements LocationDao {
     }
 
     @Override
+    public List<Location> search(String searchParam) {
+        final String searchQuery = "select * from m_location where city = ? order by id desc";
+        return jdbcTemplate.query(searchQuery, this::userRowMapper, searchParam);
+    }
+
+    @Override
     public Location save(Location location) {
-        final String insertQuery = "insert into m_location (country, city, street, house, apartment)\n" +
-                " values (:country, :city, :street, :house, :apartment)";
+        final String insertQuery = "insert into m_location (country, city, street, house, apartment, is_deleted)\n" +
+                " values (:country, :city, :street, :house, :apartment, :is_deleted)";
         final String findLastIdQuery = "SELECT currval('m_location_id_seq') as last_insert_id";
 
         namedParameterJdbcTemplate.update(insertQuery, new MapSqlParameterSource("country", location.getCountry())
                 .addValue("city", location.getCity())
                 .addValue("street", location.getStreet())
                 .addValue("house", location.getHouse())
-                .addValue("apartment", location.getApartment()));
+                .addValue("apartment", location.getApartment())
+                .addValue("is_deleted", location.isDeleted()));
 
         long lastId = jdbcTemplate.queryForObject(findLastIdQuery, Long.class);
 
@@ -76,7 +84,7 @@ public class LocationRepository implements LocationDao {
 
     @Override
     public int delete(Long locationId) {
-        final String deleteQuery = "delete from m_location where id = ?";
+        final String deleteQuery = "update m_location set is_deleted = true where id = ?";
         return jdbcTemplate.update(deleteQuery, locationId);
     }
 
@@ -88,6 +96,7 @@ public class LocationRepository implements LocationDao {
         location.setStreet(resultSet.getString(STREET));
         location.setHouse(resultSet.getString(HOUSE));
         location.setApartment(resultSet.getString(APARTMENT));
+        location.setDeleted(resultSet.getBoolean(LOCATION_IS_DELETED));
         return location;
     }
 

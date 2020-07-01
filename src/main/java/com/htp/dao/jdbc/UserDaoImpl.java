@@ -5,6 +5,7 @@ import com.htp.domain.User;
 import com.htp.exeptions.ResourceNotFoundException;
 import com.htp.util.DatabaseConfiguration;
 
+import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +26,9 @@ public class UserDaoImpl implements UserDao {
     public static final String USER_CREATED = "created";
     public static final String USER_CHANGED = "changed";
     public static final String USER_LOCATION = "location_id";
+    public static final String USER_IS_DELETED = "is_deleted";
+
+    private DataSource dataSource;
 
     @Override
     public List<User> findAll() {
@@ -98,6 +102,28 @@ public class UserDaoImpl implements UserDao {
         }
         return user;
     }
+
+    @Override
+    public List<User> search(String searchParam) {
+        final String findAllQueryForPrepared = "select * from m_users where id > ? order by id desc";
+
+        List<User> resultList = new ArrayList<>();
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(findAllQueryForPrepared)) {
+
+            preparedStatement.setLong(1, Long.parseLong(searchParam));
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                resultList.add(parseResultSet(resultSet));
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return resultList;
+    }
+
 
     @Override
     public User save(User user) {
@@ -218,6 +244,7 @@ public class UserDaoImpl implements UserDao {
         user.setCreated(resultSet.getTimestamp(USER_CREATED));
         user.setChanged(resultSet.getTimestamp(USER_CHANGED));
         user.setLocationId(resultSet.getLong(USER_LOCATION));
+        user.setDeleted(resultSet.getBoolean(USER_IS_DELETED));
         return user;
     }
 }

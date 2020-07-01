@@ -6,6 +6,7 @@ import com.htp.exeptions.ResourceNotFoundException;
 import com.htp.util.DatabaseConfiguration;
 import org.springframework.stereotype.Component;
 
+import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +24,8 @@ public class LocationDaoImpl implements LocationDao {
     public static final String STREET = "street";
     public static final String HOUSE = "house";
     public static final String APARTMENT = "apartment";
+
+    private DataSource dataSource;
 
     @Override
     public List<Location> findAll() {
@@ -95,6 +98,27 @@ public class LocationDaoImpl implements LocationDao {
             }
         }
         return location;
+    }
+
+    @Override
+    public List<Location> search(String searchParam) {
+        final String findAllQueryForPrepared = "select * from m_location where id > ? order by id desc";
+
+        List<Location> resultList = new ArrayList<>();
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(findAllQueryForPrepared)) {
+
+            preparedStatement.setLong(1, Long.parseLong(searchParam));
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                resultList.add(parseResultSet(resultSet));
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return resultList;
     }
 
     @Override

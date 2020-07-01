@@ -33,6 +33,11 @@ public class LocationServiceImpl implements LocationService {
     }
 
     @Override
+    public List<Location> search(String searchParam) {
+        return locationDao.search(searchParam);
+    }
+
+    @Override
     public Location save(Location location) {
         return locationDao.save(location);
     }

@@ -12,6 +12,8 @@ public interface UserService {
 
     User findOne(Long userId);
 
+    List<User> search(String searchParam);
+
     User save(User user);
 
     User update(User user);

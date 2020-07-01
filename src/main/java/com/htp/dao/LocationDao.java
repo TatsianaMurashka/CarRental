@@ -13,6 +13,8 @@ public interface LocationDao {
 
     Location findOne(Long locationId);
 
+    List<Location> search(String searchParam);
+
     Location save(Location location);
 
     Location update(Location location);
