@@ -82,13 +82,14 @@ public class UserRepository implements UserDao {
 
     @Override
     public User update(User user) {
-        final String updateQuery = "update m_users set first_name = :first_name, last_name = :last_name, phone_number = :phone_number, passport_data = :passport_data" +
+        final String updateQuery = "update m_users set first_name = :first_name, last_name = :last_name, phone_number = :phone_number, passport_data = :passport_data, login = :login" +
                 " where id = :id";
 
         namedParameterJdbcTemplate.update(updateQuery, new MapSqlParameterSource("first_name", user.getFirstName())
                 .addValue("last_name", user.getLastName())
                 .addValue("phone_number", user.getPhoneNumber())
                 .addValue("passport_data", user.getPassportData())
+                .addValue("login", user.getLogin())
                 .addValue("id", user.getId()));
 
         return findOne(user.getId());

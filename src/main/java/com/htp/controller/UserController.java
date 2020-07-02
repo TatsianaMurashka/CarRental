@@ -1,20 +1,19 @@
 package com.htp.controller;
 
 import com.htp.controller.request.UserCreateRequest;
-import com.htp.domain.Location;
+import com.htp.controller.request.UserUpdateRequest;
 import com.htp.domain.User;
 import com.htp.service.UserService;
+import io.swagger.annotations.*;
 import org.apache.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/users")
@@ -28,18 +27,52 @@ public class UserController {
         this.userService = userService;
     }
 
+
+    @ApiOperation(value = "Get all users")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Successful loading users"),
+            @ApiResponse(code = 500, message = "Server error")
+    })
     @GetMapping
     public ResponseEntity<List<User>> findAll() {
         return new ResponseEntity<>(userService.findAll(), HttpStatus.OK);
     }
 
+    @ApiOperation(value = "Finding user by id")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Successful loading user"),
+            @ApiResponse(code = 500, message = "Server error, something wrong"),
+            @ApiResponse(code = 502, message = "Wrong user id")
+    })
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "User database identifier", example = "1", required = true, dataType = "long", paramType = "path")
+    })
     @GetMapping("/{id}")
     public User findById(@PathVariable("id")Long userId) {
         return userService.findOne(userId);
     }
 
+    @ApiOperation(value = "Search users by login")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Successful loading user"),
+            @ApiResponse(code = 500, message = "Server error, something wrong")
+    })
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "query", value = "Search query - free text", example = "tatsianam", required = true, dataType = "string", paramType = "query")
+    })
+    @GetMapping("/search")
+    public List<User> searchUser(@RequestParam("query") String query) {
+        return userService.search(query);
+    }
+
+    @ApiOperation(value = "Create user")
+    @ApiResponses({
+            @ApiResponse(code = 201, message = "Successful creation user"),
+            @ApiResponse(code = 422, message = "Failed user creation properties validation"),
+            @ApiResponse(code = 500, message = "Server error, something wrong")
+    })
     @PostMapping
-    public User create(@RequestBody UserCreateRequest createRequest) {
+    public User create(@Valid @RequestBody UserCreateRequest createRequest) {
         User user = new User();
         user.setFirstName(createRequest.getFirstName());
         user.setLastName(createRequest.getLastName());
@@ -49,10 +82,44 @@ public class UserController {
         user.setPassword(createRequest.getPassword());
         user.setCreated(new Timestamp(new Date().getTime()));
         user.setChanged(new Timestamp(new Date().getTime()));
-//        user.setLocationId();
 
         return userService.save(user);
     }
+
+    @ApiOperation(value = "Update user")
+    @ApiResponses({
+            @ApiResponse(code = 201, message = "Successful update user"),
+            @ApiResponse(code = 422, message = "Failed user update properties validation"),
+            @ApiResponse(code = 500, message = "Server error, something wrong"),
+            @ApiResponse(code = 502, message = "Wrong user id")
+    })
+    @PutMapping
+    public User update(@Valid @RequestBody UserUpdateRequest updateRequest) {
+        User userToUpdate = userService.findOne(updateRequest.getId());
+        userToUpdate.setFirstName(updateRequest.getFirstName());
+        userToUpdate.setLastName(updateRequest.getLastName());
+        userToUpdate.setPhoneNumber(updateRequest.getPhoneNumber());
+        userToUpdate.setLogin(updateRequest.getLogin());
+        userToUpdate.setChanged(new Timestamp(new Date().getTime()));
+        return userService.update(userToUpdate);
+    }
+
+    @ApiOperation(value = "Mark user as deleted")
+    @ApiResponses({
+            @ApiResponse(code = 201, message = "Successful delete user"),
+            @ApiResponse(code = 500, message = "Server error, something wrong"),
+            @ApiResponse(code = 502, message = "Wrong user id")
+    })
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "User database identifier", example = "1", required = true, dataType = "long", paramType = "path")
+    })
+    @PutMapping("/{id}")
+    public User deleteUser(@PathVariable("id") Long userId) {
+        User userToDelete = userService.findOne(userId);
+        userService.delete(userToDelete.getId());
+        return userService.findOne(userId);
+    }
+
 
 //    @GetMapping
 //    public String findAll(ModelMap modelMap) {
