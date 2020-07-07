@@ -64,6 +64,11 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
+    public Optional<User> findByLogin(String username) {
+        return Optional.empty();
+    }
+
+    @Override
     public User findOne(Long userId) {
         final String findById = "select * from m_users where id = ?";
 

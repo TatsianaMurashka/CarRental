@@ -30,6 +30,8 @@ public class User implements Serializable {
 
     private Long locationId;
 
+    private Role role;
+
     private boolean isDeleted;
 
     public User() {
@@ -136,6 +138,14 @@ public class User implements Serializable {
         isDeleted = deleted;
     }
 
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -151,12 +161,13 @@ public class User implements Serializable {
                 Objects.equals(password, user.password) &&
                 Objects.equals(created, user.created) &&
                 Objects.equals(changed, user.changed) &&
-                Objects.equals(locationId, user.locationId);
+                Objects.equals(locationId, user.locationId) &&
+                Objects.equals(role, user.role);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, firstName, lastName, phoneNumber, passportData, login, password, created, changed, locationId, isDeleted);
+        return Objects.hash(id, firstName, lastName, phoneNumber, passportData, login, password, created, changed, locationId, role, isDeleted);
     }
 
     @Override
@@ -172,6 +183,7 @@ public class User implements Serializable {
                 ", created=" + created +
                 ", changed=" + changed +
                 ", locationId=" + locationId +
+                ", role=" + role +
                 ", isDeleted=" + isDeleted +
                 '}';
     }

@@ -11,6 +11,8 @@ public interface UserDao {
 
     Optional<User> findById(Long userId);
 
+    Optional<User> findByLogin(String username);
+
     User findOne(Long userId);
 
     List<User> search(String searchParam);

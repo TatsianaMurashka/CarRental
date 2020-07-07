@@ -1,12 +1,15 @@
 package com.htp.controller;
 
 import com.htp.controller.response.ErrorMessage;
+import io.jsonwebtoken.ExpiredJwtException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+
+import javax.naming.AuthenticationException;
 
 @Slf4j
 @ControllerAdvice
@@ -18,10 +21,16 @@ public class DefaultExceptionHandler {
         return new ResponseEntity<>(new ErrorMessage(1L, e.getLocalizedMessage()), HttpStatus.UNPROCESSABLE_ENTITY);
     }
 
-    @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<ErrorMessage> handleRuntimeException(RuntimeException e) {
-        log.error(e.getMessage(), e);
-        return new ResponseEntity<>(new ErrorMessage(e.getLocalizedMessage()), HttpStatus.BAD_GATEWAY);
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<ErrorMessage> handleAuthenticationException(AuthenticationException e) {
+        log.error(e.getLocalizedMessage(), e);
+        return new ResponseEntity<>(new ErrorMessage(2L, e.getLocalizedMessage()), HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(ExpiredJwtException.class)
+    public ResponseEntity<ErrorMessage> handleExpiredJwtException(ExpiredJwtException e) {
+        log.error(e.getLocalizedMessage(), e);
+        return new ResponseEntity<>(new ErrorMessage(2L, e.getLocalizedMessage()), HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(Exception.class)

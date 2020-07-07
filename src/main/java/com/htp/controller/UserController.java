@@ -1,25 +1,25 @@
 package com.htp.controller;
 
-import com.htp.controller.request.UserCreateRequest;
 import com.htp.controller.request.UserUpdateRequest;
 import com.htp.domain.User;
 import com.htp.service.UserService;
 import io.swagger.annotations.*;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.security.Principal;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/users")
 public class UserController {
-
-    private static final Logger log = Logger.getLogger(UserController.class);
 
     private UserService userService;
 
@@ -33,6 +33,9 @@ public class UserController {
             @ApiResponse(code = 200, message = "Successful loading users"),
             @ApiResponse(code = 500, message = "Server error")
     })
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string", paramType = "header")
+    })
     @GetMapping
     public ResponseEntity<List<User>> findAll() {
         return new ResponseEntity<>(userService.findAll(), HttpStatus.OK);
@@ -45,6 +48,7 @@ public class UserController {
             @ApiResponse(code = 502, message = "Wrong user id")
     })
     @ApiImplicitParams({
+            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string", paramType = "header"),
             @ApiImplicitParam(name = "id", value = "User database identifier", example = "1", required = true, dataType = "long", paramType = "path")
     })
     @GetMapping("/{id}")
@@ -58,32 +62,12 @@ public class UserController {
             @ApiResponse(code = 500, message = "Server error, something wrong")
     })
     @ApiImplicitParams({
+            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string", paramType = "header"),
             @ApiImplicitParam(name = "query", value = "Search query - free text", example = "tatsianam", required = true, dataType = "string", paramType = "query")
     })
     @GetMapping("/search")
     public List<User> searchUser(@RequestParam("query") String query) {
         return userService.search(query);
-    }
-
-    @ApiOperation(value = "Create user")
-    @ApiResponses({
-            @ApiResponse(code = 201, message = "Successful creation user"),
-            @ApiResponse(code = 422, message = "Failed user creation properties validation"),
-            @ApiResponse(code = 500, message = "Server error, something wrong")
-    })
-    @PostMapping
-    public User create(@Valid @RequestBody UserCreateRequest createRequest) {
-        User user = new User();
-        user.setFirstName(createRequest.getFirstName());
-        user.setLastName(createRequest.getLastName());
-        user.setPhoneNumber(createRequest.getPhoneNumber());
-        user.setPassportData(createRequest.getPassportData());
-        user.setLogin(createRequest.getLogin());
-        user.setPassword(createRequest.getPassword());
-        user.setCreated(new Timestamp(new Date().getTime()));
-        user.setChanged(new Timestamp(new Date().getTime()));
-
-        return userService.save(user);
     }
 
     @ApiOperation(value = "Update user")
@@ -92,6 +76,9 @@ public class UserController {
             @ApiResponse(code = 422, message = "Failed user update properties validation"),
             @ApiResponse(code = 500, message = "Server error, something wrong"),
             @ApiResponse(code = 502, message = "Wrong user id")
+    })
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string", paramType = "header")
     })
     @PutMapping
     public User update(@Valid @RequestBody UserUpdateRequest updateRequest) {
@@ -111,6 +98,7 @@ public class UserController {
             @ApiResponse(code = 502, message = "Wrong user id")
     })
     @ApiImplicitParams({
+            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string", paramType = "header"),
             @ApiImplicitParam(name = "id", value = "User database identifier", example = "1", required = true, dataType = "long", paramType = "path")
     })
     @PutMapping("/{id}")

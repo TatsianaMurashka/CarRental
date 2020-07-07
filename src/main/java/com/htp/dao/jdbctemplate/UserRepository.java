@@ -2,6 +2,7 @@ package com.htp.dao.jdbctemplate;
 
 import com.htp.dao.UserDao;
 import com.htp.domain.User;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -28,6 +29,7 @@ public class UserRepository implements UserDao {
     public static final String USER_IS_DELETED = "is_deleted";
 
     private JdbcTemplate jdbcTemplate;
+
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     public UserRepository(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
@@ -44,6 +46,15 @@ public class UserRepository implements UserDao {
     @Override
     public Optional<User> findById(Long userId) {
         return Optional.ofNullable(findOne(userId));
+    }
+
+    @Override
+    public Optional<User> findByLogin(String username) {
+        try {final String findByLogin = "select * from m_users where login = ?";
+            return Optional.of(jdbcTemplate.queryForObject(findByLogin, this::userRowMapper, username));
+        } catch (DataAccessException exception) {
+            return Optional.empty();
+        }
     }
 
     @Override
