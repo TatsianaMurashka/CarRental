@@ -45,7 +45,7 @@ public class UserCreateRequest {
     private String login;
 
     @NotNull
-    @Size(min = 6, max = 255)
+    @Size(min = 3, max = 255)
     @ApiModelProperty(required = true, dataType = "string", notes = "User password")
     private String password;
 }
