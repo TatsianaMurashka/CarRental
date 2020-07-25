@@ -69,6 +69,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/logout/**").permitAll()
                 .antMatchers("/swagger-ui.html#").permitAll()
                 .antMatchers("/hibernate/users/**").permitAll()
+                .antMatchers("/hibernate/cars/**").permitAll()
+                .antMatchers("/hibernate/rent/**").permitAll()
                 .antMatchers("/users/**").hasAnyRole("ADMIN, USER")
                 .antMatchers("/admin/**").hasAnyRole("ADMIN")
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()

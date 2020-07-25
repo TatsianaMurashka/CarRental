@@ -6,6 +6,8 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,15 +16,20 @@ public class UserHibernateRepository implements HibernateUserDao {
 
     private SessionFactory sessionFactory;
 
-    public UserHibernateRepository(SessionFactory sessionFactory) {
+    private EntityManagerFactory entityManagerFactory;
+
+    public UserHibernateRepository(SessionFactory sessionFactory, EntityManagerFactory entityManagerFactory) {
         this.sessionFactory = sessionFactory;
+        this.entityManagerFactory = entityManagerFactory;
     }
 
     @Override
     public List<HibernateUser> findAll() {
-        try (Session session = sessionFactory.openSession()) {
-            return session.createQuery("select hu from HibernateUser hu order by id asc", HibernateUser.class).list();
-        }
+//        try (Session session = sessionFactory.openSession()) {
+//            return session.createQuery("select hu from HibernateUser hu order by id asc", HibernateUser.class).list();
+//        }
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        return entityManager.createQuery("select user from HibernateUser user order by user.id asc", HibernateUser.class).getResultList();
     }
 
     @Override
