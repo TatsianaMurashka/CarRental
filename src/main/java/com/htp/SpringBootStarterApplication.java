@@ -10,8 +10,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Primary;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
+import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
@@ -24,7 +24,6 @@ import javax.sql.DataSource;
 @EnableAspectJAutoProxy(proxyTargetClass = true)
 @EnableTransactionManagement(proxyTargetClass = true)
 @SpringBootApplication(scanBasePackages = {"com.htp"})
-@EnableJpaRepositories
 @Import({
         ApplicationBeanConfiguration.class,
         //DatasourceConfiguration.class,
@@ -69,5 +68,10 @@ public class SpringBootStarterApplication {
         em.setJpaVendorAdapter(vendorAdapter);
 
         return em;
+    }
+
+    @Bean
+    public JpaTransactionManager getTransactionManager(SessionFactory sessionFactory) {
+        return new JpaTransactionManager(sessionFactory);
     }
 }
