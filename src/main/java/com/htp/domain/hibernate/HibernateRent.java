@@ -6,8 +6,8 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.sql.Date;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Setter
 @Getter
@@ -31,10 +31,10 @@ public class HibernateRent implements Serializable {
     private Long carId;
 
     @Column(name = "rent_start_date")
-    private Date rentStartDate;
+    private LocalDateTime rentStartDate;
 
     @Column(name = "rent_end_date")
-    private Date rentEndDate;
+    private LocalDateTime rentEndDate;
 
     @Column
     private Timestamp created;

@@ -35,4 +35,9 @@ public class HibernateUserService implements HibUserService {
     public HibernateUser findOne(Long userId) {
         return hibernateUserRepository.findOne(userId);
     }
+
+    @Override
+    public List<Object> search(String query) {
+        return null;
+    }
 }

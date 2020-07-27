@@ -1,5 +1,5 @@
 package com.htp.domain;
 
 public enum CarAvailability {
-    AVAILABLE, BOOKED
+    AVAILABLE, BUSY, EXPIRED
 }

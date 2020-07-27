@@ -17,9 +17,6 @@ import java.util.List;
 public interface UserRepository extends CrudRepository<HibernateUser, Long>, JpaRepository<HibernateUser, Long>, PagingAndSortingRepository<HibernateUser, Long> {
 
 
-//    /*select * from n_users where is_blocked is not true*/
-//    List<HibernateUser> findByBlockedIsTrueAndGenderIsAndLoginEquals(Gender gender, String login);
-
     @Cacheable
     @Query(value = "select u from HibernateUser u join u.roles role where role.roleName = 'ROLE_ADMIN' ")
     List<HibernateUser> findUsersWithAdminRoles();
@@ -39,11 +36,8 @@ public interface UserRepository extends CrudRepository<HibernateUser, Long>, Jpa
     @Query("select u.id, u.login, u.firstName, u.lastName from HibernateUser u order by u.id")
     List<Object[]> findAllUserProfiles();
 
-    //Not recommended
-//    @Query("select u.id, u.login, u.username, u.surname from HibernateUser u order by u.id")
-//    List<UserProfile> findAllUserProfilesCoolVersion();
-
     @Modifying
-    @Query("update HibernateUser u set u.firstName = :username")
-    int updateUserFirstName(String username);
+    @Query("update HibernateUser u set u.firstName = :firstName, u.lastName = :lastName, u.phoneNumber = :phoneNumber, u.login = :login")
+    int updateUser(String firstName, String lastName, String phoneNumber, String login);
+
 }

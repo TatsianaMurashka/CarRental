@@ -7,7 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Date;
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -22,9 +22,9 @@ public class RentCreateRequest {
 
     private Long carId;
 
-    private Date rentStartDate;
+    private LocalDateTime rentStartDate;
 
-    private Date rentEndDate;
+    private LocalDateTime rentEndDate;
 
     private Double rentPrice;
 

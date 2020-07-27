@@ -14,7 +14,7 @@ public interface HibernateUserDao {
 
     HibernateUser findOne(Long userId);
 
-    List<HibernateUser> search(String searchParam);
+    List<Object> search(String searchParam);
 
     HibernateUser save(HibernateUser user);
 

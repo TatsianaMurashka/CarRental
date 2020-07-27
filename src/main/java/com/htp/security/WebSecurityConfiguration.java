@@ -72,6 +72,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/hibernate/cars/**").permitAll()
                 .antMatchers("/hibernate/rent/**").permitAll()
                 .antMatchers("/springdata/users/**").permitAll()
+                .antMatchers("/springdata/cars/**").permitAll()
+                .antMatchers("/springdata/rents/**").permitAll()
                 .antMatchers("/users/**").hasAnyRole("ADMIN, USER")
                 .antMatchers("/admin/**").hasAnyRole("ADMIN")
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()

@@ -12,5 +12,7 @@ public interface HibUserService {
 
     HibernateUser findOne(Long userId);
 
+    List<Object> search(String query);
+
     HibernateUser save(HibernateUser user);
 }

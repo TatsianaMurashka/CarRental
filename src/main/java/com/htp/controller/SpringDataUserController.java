@@ -1,6 +1,7 @@
 package com.htp.controller;
 
 import com.htp.controller.request.UserCreateRequest;
+import com.htp.controller.request.UserUpdateRequest;
 import com.htp.dao.springdata.UserRepository;
 import com.htp.domain.Roles;
 import com.htp.domain.hibernate.HibernateRole;
@@ -16,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,7 +26,6 @@ import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
-import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Collections;
 import java.util.Date;
@@ -116,4 +117,39 @@ public class SpringDataUserController {
 
         return userRepository.save(user);
     }
+
+    @ApiOperation(value = "Update user")
+    @ApiResponses({
+            @ApiResponse(code = 201, message = "Successful creation user"),
+            @ApiResponse(code = 422, message = "Failed user creation properties validation"),
+            @ApiResponse(code = 500, message = "Server error, something wrong")
+    })
+    @PutMapping
+    public HibernateUser update(@Valid @RequestBody UserUpdateRequest updateRequest) {
+
+        HibernateUser user = new HibernateUser();
+        user.setFirstName(updateRequest.getFirstName());
+        user.setLastName(updateRequest.getLastName());
+        user.setPhoneNumber(updateRequest.getPhoneNumber());
+        user.setLogin(updateRequest.getLogin());
+        user.setCreated(new Timestamp(new Date().getTime()));
+        user.setChanged(new Timestamp(new Date().getTime()));
+
+        userRepository.updateUser(user.getFirstName(), user.getLastName(), user.getPhoneNumber(), user.getLogin());
+        return user;
+    }
+
+//    @ApiOperation(value = "Delete user")
+//    @ApiResponses({
+//            @ApiResponse(code = 201, message = "Successful delete user"),
+//            @ApiResponse(code = 500, message = "Server error, something wrong"),
+//            @ApiResponse(code = 502, message = "Wrong user id")
+//    })
+//    @PutMapping("/{id}")
+//    public HibernateUser deleteUser(@PathVariable Long id) {
+//        HibernateUser user = new HibernateUser();
+//        userRepository.deleteUser(user.getId());
+//        return user;
+//    }
+
 }
