@@ -3,21 +3,17 @@ package com.htp.controller.request;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.validation.constraints.*;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-
-@Builder
+@Setter
+@Getter
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 @ApiModel(description = "User update model")
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
-public class UserUpdateRequest {
+public class UserUpdateRequest extends UserCreateRequest {
     @NotNull
     @Size(min = 1, max = 255)
     @ApiModelProperty(dataType = "string", notes = "user first name")
@@ -41,4 +37,5 @@ public class UserUpdateRequest {
     @Positive
     @ApiModelProperty(required = true, dataType = "long", notes = "user id")
     private Long id;
+
 }

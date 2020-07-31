@@ -1,20 +1,24 @@
 package com.htp.controller;
 
+import com.htp.controller.request.CarCreateRequest;
 import com.htp.dao.springdata.CarRepository;
 import com.htp.domain.CarAvailability;
 import com.htp.domain.hibernate.HibernateCar;
-import com.htp.domain.hibernate.HibernateRent;
 import io.swagger.annotations.*;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -23,8 +27,11 @@ public class SpringDataCarController {
 
     private CarRepository carRepository;
 
-    public SpringDataCarController(CarRepository carRepository) {
+    private ConversionService conversionService;
+
+    public SpringDataCarController(CarRepository carRepository, ConversionService conversionService) {
         this.carRepository = carRepository;
+        this.conversionService = conversionService;
     }
 
     @ApiOperation(value = "Finding car by id")
@@ -48,6 +55,20 @@ public class SpringDataCarController {
     @GetMapping
     public ResponseEntity<List<HibernateCar>> findAll() {
         return new ResponseEntity<>(carRepository.findAll(), HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "Create car")
+    @ApiResponses({
+            @ApiResponse(code = 201, message = "Successful creation car"),
+            @ApiResponse(code = 422, message = "Failed user creation properties validation"),
+            @ApiResponse(code = 500, message = "Server error, something wrong")
+    })
+    @PostMapping
+    public HibernateCar create(@Valid @RequestBody CarCreateRequest createRequest) {
+
+        HibernateCar car = conversionService.convert(createRequest, HibernateCar.class);
+
+        return carRepository.save(car);
     }
 
     @Transactional(rollbackFor = Exception.class, isolation = Isolation.DEFAULT, propagation = Propagation.REQUIRED)

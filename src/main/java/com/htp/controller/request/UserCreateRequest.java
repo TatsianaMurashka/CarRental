@@ -13,8 +13,6 @@ import javax.validation.constraints.Size;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-
-@Builder
 @ApiModel(description = "User creation model")
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class UserCreateRequest {

@@ -30,6 +30,9 @@ public class HibernateRent implements Serializable {
     @Column(name = "car_id")
     private Long carId;
 
+    @Column(name = "user_id")
+    private Long userId;
+
     @Column(name = "rent_start_date")
     private LocalDateTime rentStartDate;
 

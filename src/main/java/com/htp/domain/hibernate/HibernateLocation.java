@@ -1,6 +1,6 @@
 package com.htp.domain.hibernate;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -32,8 +32,8 @@ public class HibernateLocation {
     @Column(name = "is_deleted")
     private boolean deleted;
 
-//    @JsonBackReference
-//    @OneToOne
-//    @JoinColumn(name = "user_id", nullable = false)
-//    private HibernateUser user;
+    @JsonManagedReference
+    @OneToOne(mappedBy = "location", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+    private HibernateUser user;
+
 }

@@ -31,13 +31,13 @@ public class HibernateCar implements Serializable {
     private String registrationNumber;
 
     @Column(name = "model_id")
-    private Long modelId;
+    private Long model;
 
     @Column(name = "price_per_day")
     private Double pricePerDay;
 
     @Column(name = "office_id")
-    private Long officeId;
+    private Long office;
 
     @Column(name = "availability_status")
     @Enumerated(EnumType.STRING)
@@ -46,4 +46,14 @@ public class HibernateCar implements Serializable {
     @JsonManagedReference
     @OneToMany(mappedBy = "car", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     private Set<HibernateRent> rents = Collections.emptySet();
+
+//    @JsonManagedReference
+//    @ManyToOne
+//    @JoinColumn(name = "model_id", nullable = false)
+//    private HibernateModel model;
+//
+//    @JsonManagedReference
+//    @ManyToOne
+//    @JoinColumn(name = "office_id", nullable = false)
+//    private HibernateOffice office;
 }

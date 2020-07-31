@@ -1,5 +1,6 @@
 package com.htp.domain.hibernate;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.htp.domain.Gender;
 import lombok.*;
@@ -52,9 +53,6 @@ public class HibernateUser implements Serializable {
     @Column
     private Timestamp changed;
 
-    @Column(name = "location_id")
-    private Long locationId;
-
     @Column(name = "is_deleted")
     private boolean deleted;
 
@@ -69,5 +67,10 @@ public class HibernateUser implements Serializable {
     @JsonManagedReference
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     private Set<HibernateRent> rents = Collections.emptySet();
+
+    @JsonBackReference
+    @OneToOne
+    @JoinColumn(name = "location_id", nullable = false)
+    private HibernateLocation location;
 
 }
