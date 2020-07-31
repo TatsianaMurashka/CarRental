@@ -17,12 +17,8 @@ public class RentCreateRequest {
 
     private Long userId;
 
-    private Long carId;
-
     private LocalDateTime rentStartDate;
 
     private LocalDateTime rentEndDate;
-
-    private Double rentPrice;
 
 }

@@ -11,11 +11,9 @@ import java.util.Date;
 public abstract class RentRequestConverter<S, T> extends EntityConverter<S, T> {
     protected HibernateRent doConvert(HibernateRent rent, RentCreateRequest request) {
 
-        rent.setCarId(request.getCarId());
         rent.setUserId(request.getUserId());
         rent.setRentStartDate(request.getRentStartDate());
         rent.setRentEndDate(request.getRentEndDate());
-        rent.setRentPrice(request.getRentPrice());
         rent.setChanged(new Timestamp(new Date().getTime()));
 
         return rent;

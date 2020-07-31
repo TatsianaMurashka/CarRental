@@ -1,8 +1,10 @@
 package com.htp.controller;
 
 import com.htp.controller.request.RentCreateRequest;
+import com.htp.dao.springdata.CarRepository;
 import com.htp.dao.springdata.RentRepository;
 import com.htp.domain.RentStatus;
+import com.htp.domain.hibernate.HibernateCar;
 import com.htp.domain.hibernate.HibernateRent;
 import io.swagger.annotations.*;
 import org.springframework.core.convert.ConversionService;
@@ -20,6 +22,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Random;
+
+import static java.time.temporal.ChronoUnit.DAYS;
 
 @RestController
 @RequestMapping("/springdata/rents")
@@ -29,9 +34,15 @@ public class SpringDataRentController {
 
     private ConversionService conversionService;
 
-    public SpringDataRentController(RentRepository rentRepository, ConversionService conversionService) {
+    private CarRepository carRepository;
+
+    private int createRentErrorsCount = 0;
+    private final int CAR_CREATE_ERROR_LIMIT = 2;
+
+    public SpringDataRentController(RentRepository rentRepository, ConversionService conversionService, CarRepository carRepository) {
         this.rentRepository = rentRepository;
         this.conversionService = conversionService;
+        this.carRepository = carRepository;
     }
 
     @ApiOperation(value = "Finding rent by id")
@@ -69,7 +80,44 @@ public class SpringDataRentController {
 
         HibernateRent rent = conversionService.convert(createRequest, HibernateRent.class);
 
+        List<HibernateCar> availableCars = carRepository.findAllAvailableCars();
+        if (availableCars.size() != 0)
+        {
+            return createNewRent(rent, availableCars.get(0));
+        }
+        createRentErrorsCount++;
+        if (createRentErrorsCount > CAR_CREATE_ERROR_LIMIT)
+        {
+            return handleNotEnoughCars(createRequest);
+        }
+        HibernateRent invalidRent = new HibernateRent();
+        invalidRent.setId(0L);
+        return invalidRent;
+    }
+
+    private HibernateRent createNewRent(HibernateRent rent, HibernateCar car)
+    {
+        rent.setCarId(car.getId());
+        createRentErrorsCount = 0;
+        rent.setRentPrice(DAYS.between(rent.getRentStartDate(), rent.getRentEndDate()) * car.getPricePerDay());
         return rentRepository.save(rent);
+    }
+
+    private HibernateRent handleNotEnoughCars(RentCreateRequest createRequest)
+    {
+        createNewCar();
+        createRentErrorsCount = 0;
+        return create(createRequest);
+    }
+
+    private void createNewCar()
+    {
+        HibernateCar carToAdd = new HibernateCar();
+        carToAdd.setRegistrationNumber(String.valueOf ((new Random()).nextLong()));
+        carToAdd.setModel(1l);
+        carToAdd.setPricePerDay(5.);
+        carToAdd.setOffice(1l);
+        carRepository.save(carToAdd);
     }
 
     public List<HibernateRent> findAllInternal() {

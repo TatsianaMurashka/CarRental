@@ -15,6 +15,9 @@ public interface CarRepository extends CrudRepository<HibernateCar, Long>, JpaRe
     @Query(value = "select c from HibernateCar c where c.id in (select r.carId from HibernateRent r where r.rentStatus = 'CLOSED' group by r.carId having count(r.carId) > :count)")
     List<HibernateCar> findAllCarsWithRentCount(Long count);
 
+    @Query(value = "select c from HibernateCar c where c.availabilityStatus = 'AVAILABLE' ")
+    List<HibernateCar> findAllAvailableCars();
+
     @Modifying
     @Query("update HibernateCar c set c.availabilityStatus = :availability where c.id = :id")
     int updateCar(Long id, CarAvailability availability);
