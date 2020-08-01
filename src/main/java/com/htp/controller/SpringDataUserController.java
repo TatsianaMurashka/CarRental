@@ -1,7 +1,6 @@
 package com.htp.controller;
 
 import com.htp.controller.request.UserCreateRequest;
-import com.htp.controller.request.UserUpdateRequest;
 import com.htp.dao.springdata.UserRepository;
 import com.htp.domain.hibernate.HibernateUser;
 import io.swagger.annotations.ApiImplicitParam;
@@ -42,6 +41,9 @@ public class SpringDataUserController {
     @ApiResponses({
             @ApiResponse(code = 200, message = "Successful loading users"),
             @ApiResponse(code = 500, message = "Server error, something wrong")
+    })
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string", paramType = "header")
     })
     @GetMapping
     public ResponseEntity<List<HibernateUser>> findAll() {

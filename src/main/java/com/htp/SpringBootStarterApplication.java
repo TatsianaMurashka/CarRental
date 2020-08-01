@@ -19,7 +19,6 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableAsync
 @Import({
         ApplicationBeanConfiguration.class,
-        //DatasourceConfiguration.class,
         SwaggerConfig.class
 })
 public class SpringBootStarterApplication {
