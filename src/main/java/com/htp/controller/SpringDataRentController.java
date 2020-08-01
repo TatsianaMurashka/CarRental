@@ -1,11 +1,13 @@
 package com.htp.controller;
 
 import com.htp.controller.request.RentCreateRequest;
+import com.htp.controller.request.RentUpdateRequest;
 import com.htp.dao.springdata.CarRepository;
 import com.htp.dao.springdata.RentRepository;
 import com.htp.domain.RentStatus;
 import com.htp.domain.hibernate.HibernateCar;
 import com.htp.domain.hibernate.HibernateRent;
+import com.htp.util.EmailSender;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -20,11 +22,13 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Random;
 
@@ -40,13 +44,16 @@ public class SpringDataRentController {
 
     private CarRepository carRepository;
 
+    private EmailSender emailSender;
+
     private int createRentErrorsCount = 0;
     private final int CAR_CREATE_ERROR_LIMIT = 2;
 
-    public SpringDataRentController(RentRepository rentRepository, ConversionService conversionService, CarRepository carRepository) {
+    public SpringDataRentController(RentRepository rentRepository, ConversionService conversionService, CarRepository carRepository, EmailSender emailSender) {
         this.rentRepository = rentRepository;
         this.conversionService = conversionService;
         this.carRepository = carRepository;
+        this.emailSender = emailSender;
     }
 
     @ApiOperation(value = "Finding rent by id")
@@ -61,7 +68,6 @@ public class SpringDataRentController {
     public ResponseEntity<HibernateRent> getRentById(@PathVariable Long id) {
         return new ResponseEntity<>(rentRepository.findById(id).get(), HttpStatus.OK);
     }
-
 
     @ApiOperation(value = "Finding all rents")
     @ApiResponses({
@@ -99,11 +105,28 @@ public class SpringDataRentController {
         return invalidRent;
     }
 
+    @ApiOperation(value = "Update rent")
+    @ApiResponses({
+            @ApiResponse(code = 201, message = "Successful creation rent"),
+            @ApiResponse(code = 422, message = "Failed user creation properties validation"),
+            @ApiResponse(code = 500, message = "Server error, something wrong")
+    })
+    @PutMapping
+    @Transactional(rollbackFor = Exception.class, isolation = Isolation.DEFAULT, propagation = Propagation.REQUIRED)
+    public ResponseEntity<HibernateRent> updateRent(@Valid @RequestBody RentUpdateRequest updateRequest) {
+        HibernateRent rent = conversionService.convert(updateRequest, HibernateRent.class);
+
+        rentRepository.updateRent(rent.getId(), rent.getRentPrice(), rent.getCarId(), rent.getUserId(), rent.getRentStartDate(), rent.getRentEndDate(), LocalDateTime.now());
+        rent = rentRepository.findById(rent.getId()).get();
+        return new ResponseEntity<>(rent, HttpStatus.OK);
+    }
+
     private HibernateRent createNewRent(HibernateRent rent, HibernateCar car)
     {
         rent.setCarId(car.getId());
         createRentErrorsCount = 0;
         rent.setRentPrice(DAYS.between(rent.getRentStartDate(), rent.getRentEndDate()) * car.getPricePerDay());
+        emailSender.sendSimpleMessage("murashkotatsiana@gmail.com", "new rent created", "Hello, your new rent has been created!");
         return rentRepository.save(rent);
     }
 
@@ -136,7 +159,7 @@ public class SpringDataRentController {
     public void updateRentStatusInternal(Long id, RentStatus status) {
         HibernateRent rent = rentRepository.findById(id).get();
         if (rent != null) {
-            rentRepository.updateRent(rent.getId(), status);
+            rentRepository.updateRentStatus(rent.getId(), status);
         }
     }
 

@@ -3,20 +3,14 @@ package com.htp.controller.request;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.Data;
 
 import javax.validation.constraints.*;
 
-@Setter
-@Getter
-@EqualsAndHashCode(callSuper = true)
-@ToString(callSuper = true)
+@Data
 @ApiModel(description = "User update model")
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
-public class UserUpdateRequest extends UserCreateRequest {
+public class UserUpdateRequest /*extends UserCreateRequest*/ {
     @NotNull
     @Size(min = 1, max = 255)
     @ApiModelProperty(dataType = "string", notes = "user first name")

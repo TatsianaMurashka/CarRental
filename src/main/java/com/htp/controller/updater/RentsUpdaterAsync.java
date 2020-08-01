@@ -37,7 +37,7 @@ public class RentsUpdaterAsync {
     @Async
     public void async() {
         while (!isTerminated) {
-            System.out.println("RentsUpdaterAsync: 10 seconds async check");
+            System.out.println("RentsUpdaterAsync: 1 minute async check");
             handleRentsStatusUpdate();
             handleOldCars();
             updateCarsStatus();

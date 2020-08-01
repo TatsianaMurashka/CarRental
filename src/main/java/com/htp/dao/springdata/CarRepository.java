@@ -19,7 +19,11 @@ public interface CarRepository extends CrudRepository<HibernateCar, Long>, JpaRe
     List<HibernateCar> findAllAvailableCars();
 
     @Modifying
+    @Query("update HibernateCar c set c.pricePerDay = :price, c.registrationNumber = :registrationNumber, c.office = :officeId, c.model = :modelId where c.id = :id")
+    int updateCar(Long id, Double price, String registrationNumber, Long officeId, Long modelId);
+
+    @Modifying
     @Query("update HibernateCar c set c.availabilityStatus = :availability where c.id = :id")
-    int updateCar(Long id, CarAvailability availability);
+    int updateCarAvailability(Long id, CarAvailability availability);
 
 }

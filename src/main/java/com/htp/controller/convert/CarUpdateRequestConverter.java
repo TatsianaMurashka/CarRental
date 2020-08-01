@@ -13,6 +13,7 @@ public class CarUpdateRequestConverter extends CarRequestConverter<CarUpdateRequ
     public HibernateCar convert(CarUpdateRequest request) {
 
         HibernateCar hibernateCar = ofNullable(entityManager.find(HibernateCar.class, request.getId())).orElseThrow(ResourceNotFoundException::new);
+        hibernateCar.setId(request.getId());
         return doConvert(hibernateCar, request);
     }
 }

@@ -14,6 +14,13 @@ public class RentUpdateRequestConverter extends RentRequestConverter<RentUpdateR
     public HibernateRent convert(RentUpdateRequest request) {
 
         HibernateRent hibernateRent = ofNullable(entityManager.find(HibernateRent.class, request.getId())).orElseThrow(ResourceNotFoundException::new);
-        return doConvert(hibernateRent, request);
+        hibernateRent.setRentPrice(request.getRentPrice());
+        hibernateRent.setCarId(request.getCarId());
+        hibernateRent.setId(request.getId());
+        hibernateRent.setUserId(request.getUserId());
+        hibernateRent.setRentEndDate(request.getRentEndDate());
+        hibernateRent.setRentStartDate(request.getRentStartDate());
+
+        return hibernateRent;
     }
 }

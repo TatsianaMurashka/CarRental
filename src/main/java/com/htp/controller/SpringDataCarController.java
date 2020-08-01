@@ -1,6 +1,7 @@
 package com.htp.controller;
 
 import com.htp.controller.request.CarCreateRequest;
+import com.htp.controller.request.CarUpdateRequest;
 import com.htp.dao.springdata.CarRepository;
 import com.htp.domain.CarAvailability;
 import com.htp.domain.hibernate.HibernateCar;
@@ -18,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -75,9 +77,26 @@ public class SpringDataCarController {
         return carRepository.save(car);
     }
 
+    @ApiOperation(value = "Update car")
+    @ApiResponses({
+            @ApiResponse(code = 201, message = "Successful creation user"),
+            @ApiResponse(code = 422, message = "Failed user creation properties validation"),
+            @ApiResponse(code = 500, message = "Server error, something wrong")
+    })
+    @Transactional(rollbackFor = Exception.class, isolation = Isolation.DEFAULT, propagation = Propagation.REQUIRED)
+    @PutMapping
+    public ResponseEntity<HibernateCar> update(@Valid @RequestBody CarUpdateRequest updateRequest) {
+
+        HibernateCar car = conversionService.convert(updateRequest, HibernateCar.class);
+
+        carRepository.updateCar(car.getId(), car.getPricePerDay(), car.getRegistrationNumber(), car.getOffice(), car.getModel());
+        car = carRepository.findById(car.getId()).get();
+        return new ResponseEntity<>(car, HttpStatus.OK);
+    }
+
     @Transactional(rollbackFor = Exception.class, isolation = Isolation.DEFAULT, propagation = Propagation.REQUIRED)
     public void updateCarStatus(Long id, CarAvailability status) {
-        carRepository.updateCar(id, status);
+        carRepository.updateCarAvailability(id, status);
     }
 
     public List<HibernateCar> getCarsWithRentCountInternal(Long rentCount) {

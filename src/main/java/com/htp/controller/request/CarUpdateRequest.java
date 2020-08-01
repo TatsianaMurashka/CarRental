@@ -2,10 +2,13 @@ package com.htp.controller.request;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+
+import javax.validation.constraints.Positive;
 
 @Setter
 @Getter
@@ -15,13 +18,7 @@ import lombok.ToString;
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class CarUpdateRequest extends CarCreateRequest {
 
-    private String registrationNumber;
-
-    private Long modelId;
-
-    private Double pricePerDay;
-
-    private Long officeId;
-
+    @Positive
+    @ApiModelProperty(required = true, dataType = "long", notes = "rent id")
     private Long id;
 }

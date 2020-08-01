@@ -9,9 +9,9 @@ public abstract class CarRequestConverter<S, T> extends EntityConverter<S, T> {
     protected HibernateCar doConvert(HibernateCar car, CarCreateRequest request) {
 
         car.setRegistrationNumber(request.getRegistrationNumber());
-        car.setModel(request.getModel());
+        car.setModel(request.getModelId());
         car.setPricePerDay(request.getPricePerDay());
-        car.setOffice(request.getOffice());
+        car.setOffice(request.getOfficeId());
 
         return car;
     }
