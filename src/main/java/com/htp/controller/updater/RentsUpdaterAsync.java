@@ -38,7 +38,7 @@ public class RentsUpdaterAsync {
     public void async() {
         while (!isTerminated) {
             System.out.println("RentsUpdaterAsync: 10 seconds async check");
-            handleRentsExpirations();
+            handleRentsStatusUpdate();
             handleOldCars();
             updateCarsStatus();
             try {
@@ -47,13 +47,15 @@ public class RentsUpdaterAsync {
         }
     }
 
-    private void handleRentsExpirations() {
+    private void handleRentsStatusUpdate() {
         List<HibernateRent> rents = rentController.findAllInternal();
         LocalDateTime now = LocalDateTime.now();
 
         for (HibernateRent rent : rents) {
             if (Timestamp.valueOf(now).getTime() > Timestamp.valueOf(rent.getRentEndDate()).getTime()) {
                 rentController.updateRentStatusInternal(rent.getId(), RentStatus.CLOSED);
+            } else if (isDateBetween(now, rent.getRentStartDate(), rent.getRentEndDate())) {
+                rentController.updateRentStatusInternal(rent.getId(), RentStatus.IN_PROCESS);
             }
         }
     }
@@ -66,9 +68,8 @@ public class RentsUpdaterAsync {
     }
 
     private void updateCarsStatus() {
-        LocalDateTime now = LocalDateTime.now();
         List<HibernateCar> cars = carController.findAllInternal();
-        List<HibernateRent> rents = rentController.findAllInternal();
+        List<HibernateRent> rents = rentController.findRentsWithStatusInternal(RentStatus.IN_PROCESS);
         List<HibernateCar> carsToUpdate = new ArrayList<>();
         for (var car : cars) {
             if (car.getAvailabilityStatus() == CarAvailability.AVAILABLE
@@ -77,9 +78,7 @@ public class RentsUpdaterAsync {
                 CarAvailability newStatus = CarAvailability.AVAILABLE;
                 for (var rent : rents) {
                     if (rent.getCarId() == car.getId()) {
-                        if (isDateBetween(now, rent.getRentStartDate(), rent.getRentEndDate())) {
-                            newStatus = CarAvailability.BUSY;
-                        }
+                        newStatus = CarAvailability.BUSY;
                     }
                 }
                 if (newStatus != prevStatus) {

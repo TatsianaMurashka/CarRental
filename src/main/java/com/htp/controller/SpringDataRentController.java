@@ -135,4 +135,8 @@ public class SpringDataRentController {
             rentRepository.updateRent(rent.getId(), status);
         }
     }
+
+    public List<HibernateRent> findRentsWithStatusInternal(RentStatus rentStatus) {
+        return rentRepository.findRentsWithStatus(rentStatus);
+    }
 }

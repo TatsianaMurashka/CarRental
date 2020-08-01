@@ -7,10 +7,14 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
+import java.util.List;
 
 public interface RentRepository extends CrudRepository<HibernateRent, Long>, JpaRepository<HibernateRent, Long>, PagingAndSortingRepository<HibernateRent, Long> {
 
     @Modifying
     @Query("update HibernateRent r set r.rentStatus = :rentStatus where r.id = :id")
     int updateRent(Long id, RentStatus rentStatus);
+
+    @Query(value = "select r from HibernateRent r where r.rentStatus = :rentStatus ")
+    List<HibernateRent> findRentsWithStatus(RentStatus rentStatus);
 }
