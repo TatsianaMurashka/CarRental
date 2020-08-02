@@ -7,7 +7,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public abstract class CarRequestConverter<S, T> extends EntityConverter<S, T> {
     protected HibernateCar doConvert(HibernateCar car, CarCreateRequest request) {
-
         car.setRegistrationNumber(request.getRegistrationNumber());
         car.setModel(request.getModelId());
         car.setPricePerDay(request.getPricePerDay());

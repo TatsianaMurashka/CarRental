@@ -24,5 +24,4 @@ public class RentCreateRequest {
     private LocalDateTime rentStartDate;
 
     private LocalDateTime rentEndDate;
-
 }

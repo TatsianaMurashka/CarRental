@@ -15,7 +15,6 @@ public class UserCreateRequestConverter extends UserRequestConverter<UserCreateR
 
     @Override
     public HibernateUser convert(UserCreateRequest request) {
-
         HibernateUser user = new HibernateUser();
         user.setPassportData(request.getPassportData());
         user.setLocation(1L);

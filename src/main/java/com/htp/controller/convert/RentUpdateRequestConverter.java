@@ -12,8 +12,8 @@ public class RentUpdateRequestConverter extends RentRequestConverter<RentUpdateR
 
     @Override
     public HibernateRent convert(RentUpdateRequest request) {
-
-        HibernateRent hibernateRent = ofNullable(entityManager.find(HibernateRent.class, request.getId())).orElseThrow(ResourceNotFoundException::new);
+        HibernateRent hibernateRent = ofNullable(entityManager.find(HibernateRent.class,
+            request.getId())).orElseThrow(ResourceNotFoundException::new);
         hibernateRent.setCarId(request.getCarId());
         hibernateRent.setId(request.getId());
         hibernateRent.setUserId(request.getUserId());

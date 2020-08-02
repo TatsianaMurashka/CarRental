@@ -61,14 +61,4 @@ public class HibernateCar implements Serializable {
     @JsonManagedReference
     @OneToMany(mappedBy = "car", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     private Set<HibernateRent> rents = Collections.emptySet();
-
-//    @JsonManagedReference
-//    @ManyToOne
-//    @JoinColumn(name = "model_id", nullable = false)
-//    private HibernateModel model;
-//
-//    @JsonManagedReference
-//    @ManyToOne
-//    @JoinColumn(name = "office_id", nullable = false)
-//    private HibernateOffice office;
 }

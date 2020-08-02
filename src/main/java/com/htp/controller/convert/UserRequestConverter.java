@@ -11,7 +11,6 @@ import java.util.Date;
 public abstract class UserRequestConverter<S, T> extends EntityConverter<S, T> {
 
     protected HibernateUser doConvert(HibernateUser user, UserCreateRequest request) {
-
         user.setFirstName(request.getFirstName());
         user.setLastName(request.getLastName());
         user.setPhoneNumber(request.getPhoneNumber());

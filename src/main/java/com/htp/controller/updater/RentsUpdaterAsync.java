@@ -18,6 +18,7 @@ import java.util.List;
 
 @Component
 public class RentsUpdaterAsync {
+
     private static volatile boolean isTerminated = false;
 
     public RentsUpdaterAsync() {
@@ -37,7 +38,6 @@ public class RentsUpdaterAsync {
     @Async
     public void async() {
         while (!isTerminated) {
-            System.out.println("RentsUpdaterAsync: 1 minute async check");
             handleRentsStatusUpdate();
             handleOldCars();
             updateCarsStatus();

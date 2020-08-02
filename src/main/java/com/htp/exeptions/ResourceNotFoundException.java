@@ -1,6 +1,7 @@
 package com.htp.exeptions;
 
 public class ResourceNotFoundException extends RuntimeException {
+
     public ResourceNotFoundException() {
         super();
     }

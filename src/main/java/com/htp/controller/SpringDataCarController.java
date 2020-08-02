@@ -78,7 +78,6 @@ public class SpringDataCarController {
     })
     @PostMapping
     public HibernateCar create(@Valid @RequestBody CarCreateRequest createRequest) {
-
         HibernateCar car = conversionService.convert(createRequest, HibernateCar.class);
 
         return carRepository.save(car);
@@ -96,7 +95,6 @@ public class SpringDataCarController {
     @Transactional(rollbackFor = Exception.class, isolation = Isolation.DEFAULT, propagation = Propagation.REQUIRED)
     @PutMapping
     public ResponseEntity<HibernateCar> update(@Valid @RequestBody CarUpdateRequest updateRequest) {
-
         HibernateCar car = conversionService.convert(updateRequest, HibernateCar.class);
 
         carRepository.updateCar(car.getId(), car.getPricePerDay(), car.getRegistrationNumber(), car.getOffice(), car.getModel());

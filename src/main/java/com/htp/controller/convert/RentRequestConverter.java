@@ -10,7 +10,6 @@ import java.util.Date;
 @Slf4j
 public abstract class RentRequestConverter<S, T> extends EntityConverter<S, T> {
     protected HibernateRent doConvert(HibernateRent rent, RentCreateRequest request) {
-
         rent.setUserId(request.getUserId());
         rent.setRentStartDate(request.getRentStartDate());
         rent.setRentEndDate(request.getRentEndDate());

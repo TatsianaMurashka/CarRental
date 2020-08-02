@@ -37,8 +37,7 @@ public class SpringDataUserController {
 
     private ConversionService conversionService;
 
-    public SpringDataUserController(UserRepository userRepository,
-                                    ConversionService conversionService) {
+    public SpringDataUserController(UserRepository userRepository, ConversionService conversionService) {
         this.userRepository = userRepository;
         this.conversionService = conversionService;
     }
@@ -109,7 +108,6 @@ public class SpringDataUserController {
     })
     @PostMapping
     public HibernateUser create(@Valid @RequestBody UserCreateRequest createRequest) {
-
         HibernateUser user = conversionService.convert(createRequest, HibernateUser.class);
 
         return userRepository.save(user);
@@ -126,7 +124,6 @@ public class SpringDataUserController {
     })
     @PutMapping
     public ResponseEntity<HibernateUser> update(@Valid @RequestBody UserUpdateRequest updateRequest) {
-
         HibernateUser user = conversionService.convert(updateRequest, HibernateUser.class);
 
         userRepository.updateUser(user.getId(), user.getFirstName(), user.getLastName(), user.getPhoneNumber(), user.getLogin(), user.getPassword());

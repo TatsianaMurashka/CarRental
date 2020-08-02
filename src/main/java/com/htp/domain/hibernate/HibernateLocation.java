@@ -36,5 +36,4 @@ public class HibernateLocation {
 
     @Column(name = "is_deleted")
     private boolean deleted;
-
 }

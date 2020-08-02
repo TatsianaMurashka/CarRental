@@ -47,6 +47,7 @@ public class SpringDataRentController {
     private EmailSender emailSender;
 
     private int createRentErrorsCount = 0;
+
     private final int CAR_CREATE_ERROR_LIMIT = 2;
 
     public SpringDataRentController(RentRepository rentRepository, ConversionService conversionService, CarRepository carRepository, EmailSender emailSender) {
@@ -90,7 +91,6 @@ public class SpringDataRentController {
     })
     @PostMapping
     public HibernateRent create(@Valid @RequestBody RentCreateRequest createRequest) {
-
         HibernateRent rent = conversionService.convert(createRequest, HibernateRent.class);
 
         List<HibernateCar> availableCars = carRepository.findAllAvailableCars();

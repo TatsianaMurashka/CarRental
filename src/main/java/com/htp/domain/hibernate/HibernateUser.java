@@ -86,5 +86,4 @@ public class HibernateUser implements Serializable {
     @JsonManagedReference
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     private Set<HibernateRent> rents = Collections.emptySet();
-
 }

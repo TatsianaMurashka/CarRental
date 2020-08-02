@@ -15,7 +15,6 @@ public class UserUpdateRequestConverter extends UserRequestConverter<UserUpdateR
 
     @Override
     public HibernateUser convert(UserUpdateRequest request) {
-
         HibernateUser hibernateUser = ofNullable(entityManager.find(HibernateUser.class, request.getId())).orElseThrow(ResourceNotFoundException::new);
         hibernateUser.setFirstName(request.getFirstName());
         hibernateUser.setLastName(request.getLastName());

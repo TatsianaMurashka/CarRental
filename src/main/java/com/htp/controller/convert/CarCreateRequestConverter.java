@@ -8,9 +8,7 @@ import org.springframework.stereotype.Component;
 public class CarCreateRequestConverter extends CarRequestConverter<CarCreateRequest, HibernateCar> {
     @Override
     public HibernateCar convert(CarCreateRequest carCreateRequest) {
-
         HibernateCar car = new HibernateCar();
-
         return doConvert(car, carCreateRequest);
     }
 }

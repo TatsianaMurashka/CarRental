@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 @ApiModel(description = "Rent update model")
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class RentUpdateRequest {
+
     @Positive
     @ApiModelProperty(required = true, dataType = "long", notes = "user id")
     private Long userId;

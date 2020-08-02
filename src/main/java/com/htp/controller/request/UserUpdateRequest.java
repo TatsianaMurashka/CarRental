@@ -10,7 +10,8 @@ import javax.validation.constraints.*;
 @Data
 @ApiModel(description = "User update model")
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
-public class UserUpdateRequest /*extends UserCreateRequest*/ {
+public class UserUpdateRequest {
+
     @NotNull
     @Size(min = 1, max = 255)
     @ApiModelProperty(dataType = "string", notes = "user first name")

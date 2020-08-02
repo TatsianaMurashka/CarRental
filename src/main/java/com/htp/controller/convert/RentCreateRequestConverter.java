@@ -12,7 +12,6 @@ public class RentCreateRequestConverter extends RentRequestConverter<RentCreateR
 
     @Override
     public HibernateRent convert(RentCreateRequest request) {
-
         HibernateRent rent = new HibernateRent();
 
         rent.setCreated(new Timestamp(new Date().getTime()));
