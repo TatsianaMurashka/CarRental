@@ -28,17 +28,6 @@ public class ApplicationBeanConfiguration {
                 .build();
     }
 
-//    @Bean
-//    public MappingJackson2HttpMessageConverter getMessageConverter() {
-//        return new MappingJackson2HttpMessageConverter();
-//    }
-
-//    @Bean
-//    public ViewResolver getViewResolver() {
-//        return new InternalResourceViewResolver("/WEB-INF/jsp/", ".jsp");
-//    }
-
-
     @Bean(name = "sessionFactory")
     public SessionFactory getSessionFactory(DataSource dataSource) throws Exception {
 
@@ -69,14 +58,9 @@ public class ApplicationBeanConfiguration {
         return em;
     }
 
-//    @Bean
-//    public JpaTransactionManager getTransactionManager(SessionFactory sessionFactory) {
-//        return new JpaTransactionManager(sessionFactory);
-//    }
-
     @Bean
     public CacheManager cacheManager() {
-        CaffeineCacheManager availableCars = new CaffeineCacheManager("availableCars", "userAdmins");
+        CaffeineCacheManager availableCars = new CaffeineCacheManager("availableCars");
         availableCars.setCaffeine(cacheProperties());
         return availableCars;
     }
