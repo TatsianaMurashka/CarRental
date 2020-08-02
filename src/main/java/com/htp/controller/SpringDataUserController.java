@@ -75,7 +75,8 @@ public class SpringDataUserController {
             @ApiResponse(code = 500, message = "Server error, something wrong")
     })
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "id", value = "User database id", example = "7", required = true, dataType = "long", paramType = "path")
+            @ApiImplicitParam(name = "id", value = "User database id", required = true, dataType = "long", paramType = "path"),
+            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string", paramType = "header")
     })
     @GetMapping("/{id}")
     public ResponseEntity<HibernateUser> getUserById(@PathVariable Long id) {
@@ -88,9 +89,9 @@ public class SpringDataUserController {
             @ApiResponse(code = 200, message = "Successful loading user"),
             @ApiResponse(code = 500, message = "Server error, something wrong")
     })
-//    @ApiImplicitParams({
-//            @ApiImplicitParam(name = "id", value = "login", example = "Admin123", required = true, dataType = "string", paramType = "path")
-//    })
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string", paramType = "header")
+    })
     @GetMapping("/search")
     public ResponseEntity<List<HibernateUser>> searchUsersByLogin(@RequestParam("login") String login) {
         return new ResponseEntity<>(userRepository.findUsersByLogin(login), HttpStatus.OK);
@@ -116,6 +117,9 @@ public class SpringDataUserController {
             @ApiResponse(code = 422, message = "Failed user creation properties validation"),
             @ApiResponse(code = 500, message = "Server error, something wrong")
     })
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string", paramType = "header")
+    })
     @PutMapping
     public ResponseEntity<HibernateUser> update(@Valid @RequestBody UserUpdateRequest updateRequest) {
 
@@ -128,8 +132,10 @@ public class SpringDataUserController {
     @ApiOperation(value = "Delete user")
     @ApiResponses({
             @ApiResponse(code = 201, message = "Successful delete user"),
-            @ApiResponse(code = 500, message = "Server error, something wrong"),
-            @ApiResponse(code = 502, message = "Wrong user id")
+            @ApiResponse(code = 500, message = "Server error, something wrong")
+    })
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string", paramType = "header")
     })
     @PutMapping("/{id}")
     public ResponseEntity<HibernateUser> deleteUser(@PathVariable Long id) {
@@ -137,5 +143,4 @@ public class SpringDataUserController {
         HibernateUser user = userRepository.findById(id).get();
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
-
 }

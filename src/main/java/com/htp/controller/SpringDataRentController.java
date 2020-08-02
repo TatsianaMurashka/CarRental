@@ -74,6 +74,9 @@ public class SpringDataRentController {
             @ApiResponse(code = 200, message = "Successful loading rents"),
             @ApiResponse(code = 500, message = "Server error, something wrong")
     })
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string", paramType = "header")
+    })
     @GetMapping
     public ResponseEntity<List<HibernateRent>> findAll() {
         return new ResponseEntity<>(rentRepository.findAll(), HttpStatus.OK);
@@ -126,7 +129,12 @@ public class SpringDataRentController {
         rent.setCarId(car.getId());
         createRentErrorsCount = 0;
         rent.setRentPrice(DAYS.between(rent.getRentStartDate(), rent.getRentEndDate()) * car.getPricePerDay());
-        emailSender.sendSimpleMessage("murashkotatsiana@gmail.com", "new rent created", "Hello, your new rent has been created!");
+        try {
+            emailSender.sendSimpleMessage("murashkotatsiana@gmail.com", "new rent created", "Hello, your new rent has been created!");
+        } catch(Exception ex) {
+            System.out.println(ex.getMessage());
+            ex.printStackTrace();
+        }
         return rentRepository.save(rent);
     }
 

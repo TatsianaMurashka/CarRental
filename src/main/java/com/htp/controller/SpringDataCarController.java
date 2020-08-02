@@ -46,7 +46,8 @@ public class SpringDataCarController {
             @ApiResponse(code = 500, message = "Server error, something wrong")
     })
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "id", value = "Car database id", example = "1", required = true, dataType = "long", paramType = "path")
+            @ApiImplicitParam(name = "id", value = "Car database id", example = "1", required = true, dataType = "long", paramType = "path"),
+            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string", paramType = "header")
     })
     @GetMapping("/{id}")
     public ResponseEntity<HibernateCar> getCarById(@PathVariable Long id) {
@@ -58,6 +59,9 @@ public class SpringDataCarController {
             @ApiResponse(code = 200, message = "Successful loading cars"),
             @ApiResponse(code = 500, message = "Server error, something wrong")
     })
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string", paramType = "header")
+    })
     @GetMapping
     public ResponseEntity<List<HibernateCar>> findAll() {
         return new ResponseEntity<>(carRepository.findAll(), HttpStatus.OK);
@@ -68,6 +72,9 @@ public class SpringDataCarController {
             @ApiResponse(code = 201, message = "Successful creation car"),
             @ApiResponse(code = 422, message = "Failed user creation properties validation"),
             @ApiResponse(code = 500, message = "Server error, something wrong")
+    })
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string", paramType = "header")
     })
     @PostMapping
     public HibernateCar create(@Valid @RequestBody CarCreateRequest createRequest) {
@@ -82,6 +89,9 @@ public class SpringDataCarController {
             @ApiResponse(code = 201, message = "Successful creation user"),
             @ApiResponse(code = 422, message = "Failed user creation properties validation"),
             @ApiResponse(code = 500, message = "Server error, something wrong")
+    })
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string", paramType = "header")
     })
     @Transactional(rollbackFor = Exception.class, isolation = Isolation.DEFAULT, propagation = Propagation.REQUIRED)
     @PutMapping

@@ -18,6 +18,7 @@ public class UserCreateRequestConverter extends UserRequestConverter<UserCreateR
 
         HibernateUser user = new HibernateUser();
         user.setPassportData(request.getPassportData());
+        user.setLocation(1L);
         user.setCreated(new Timestamp(new Date().getTime()));
         user.setChanged(new Timestamp(new Date().getTime()));
 
