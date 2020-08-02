@@ -15,7 +15,6 @@ import java.util.List;
 @CacheConfig(cacheNames = {"usersAdmins"})
 public interface UserRepository extends CrudRepository<HibernateUser, Long>, JpaRepository<HibernateUser, Long>, PagingAndSortingRepository<HibernateUser, Long> {
 
-
     @Query(value = "select u from HibernateUser u join u.roles role where role.roleName = 'ROLE_USER' and u.deleted = false")
     List<HibernateUser> findUsersWithUserRoles();
 

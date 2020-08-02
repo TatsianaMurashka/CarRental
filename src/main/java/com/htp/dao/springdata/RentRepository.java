@@ -9,6 +9,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 public interface RentRepository extends CrudRepository<HibernateRent, Long>, JpaRepository<HibernateRent, Long>, PagingAndSortingRepository<HibernateRent, Long> {
@@ -19,7 +20,7 @@ public interface RentRepository extends CrudRepository<HibernateRent, Long>, Jpa
 
     @Modifying
     @Query("update HibernateRent r set r.rentPrice = :rentPrice, r.carId = :carId, r.userId = :userId, r.rentStartDate = :startDate, r.rentEndDate = :endDate, r.changed = :changed  where r.id = :id")
-    int updateRent(Long id, Double rentPrice, Long carId, Long userId, LocalDateTime startDate, LocalDateTime endDate, LocalDateTime changed);
+    int updateRent(Long id, Double rentPrice, Long carId, Long userId, LocalDateTime startDate, LocalDateTime endDate, Date changed);
 
     @Query(value = "select r from HibernateRent r where r.rentStatus = :rentStatus ")
     List<HibernateRent> findRentsWithStatus(RentStatus rentStatus);

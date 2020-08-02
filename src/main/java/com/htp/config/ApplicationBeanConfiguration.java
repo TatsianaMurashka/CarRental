@@ -76,9 +76,9 @@ public class ApplicationBeanConfiguration {
 
     @Bean
     public CacheManager cacheManager() {
-        CaffeineCacheManager usersAdmins = new CaffeineCacheManager("usersAdmins");
-        usersAdmins.setCaffeine(cacheProperties());
-        return usersAdmins;
+        CaffeineCacheManager availableCars = new CaffeineCacheManager("availableCars", "userAdmins");
+        availableCars.setCaffeine(cacheProperties());
+        return availableCars;
     }
 
     public Caffeine<Object, Object> cacheProperties() {

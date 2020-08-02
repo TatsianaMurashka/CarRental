@@ -10,6 +10,8 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.core.convert.ConversionService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -53,21 +56,22 @@ public class SpringDataUserController {
         return new ResponseEntity<>(userRepository.findAllActiveUsers(), HttpStatus.OK);
     }
 
-//    @ApiOperation(value = "Search with pagination")
-//    @ApiResponses({
-//            @ApiResponse(code = 200, message = "Successful loading users"),
-//            @ApiResponse(code = 500, message = "Server error, something wrong")
-//    })
-//    @ApiImplicitParams({
-//            @ApiImplicitParam(name = "page", value = "Page number", example = "0", defaultValue = "0", dataType = "int", paramType = "query"),
-//            @ApiImplicitParam(name = "size", value = "Items per page", example = "3", defaultValue = "3", dataType = "int", paramType = "query"),
-//            @ApiImplicitParam(name = "sort", value = "Field to sort", example = "0", defaultValue = "id", dataType = "string", paramType = "query")
-//    })
-//    @GetMapping("/search")
-//    public ResponseEntity<Page<HibernateUser>> searchWithPagination(@ApiIgnore Pageable pageable) {
-//        Page<HibernateUser> usersPage = userRepository.findUsersWithUserRoles(pageable);
-//        return new ResponseEntity<>(usersPage, HttpStatus.OK);
-//    }
+    @ApiOperation(value = "Search with pagination")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Successful loading users"),
+            @ApiResponse(code = 500, message = "Server error, something wrong")
+    })
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "page", value = "Page number", example = "0", defaultValue = "0", dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "size", value = "Items per page", example = "3", defaultValue = "3", dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "sort", value = "Field to sort", example = "0", defaultValue = "id", dataType = "string", paramType = "query"),
+            @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string", paramType = "header")
+    })
+    @GetMapping("/search/page")
+    public ResponseEntity<Page<HibernateUser>> searchWithPagination(@ApiIgnore Pageable pageable) {
+        Page<HibernateUser> usersPage = userRepository.findAll(pageable);
+        return new ResponseEntity<>(usersPage, HttpStatus.OK);
+    }
 
     @ApiOperation(value = "Finding user by id")
     @ApiResponses({

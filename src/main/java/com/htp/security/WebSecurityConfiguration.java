@@ -70,7 +70,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/swagger-ui.html#").permitAll()
                 .antMatchers("/springdata/users/**").hasAnyRole("ADMIN")
                 .antMatchers("/springdata/cars/**").hasAnyRole("ADMIN")
-                .antMatchers("/springdata/rents/**").hasAnyRole("ADMIN")
+                .antMatchers("/springdata/rents/**").permitAll()
                 .antMatchers("/admin/**").hasAnyRole("ADMIN")
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .antMatchers("/v2/api-docs", "/configuration/ui/", "/swagger-resources/",

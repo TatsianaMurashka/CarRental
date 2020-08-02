@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -118,8 +118,14 @@ public class SpringDataRentController {
     @Transactional(rollbackFor = Exception.class, isolation = Isolation.DEFAULT, propagation = Propagation.REQUIRED)
     public ResponseEntity<HibernateRent> updateRent(@Valid @RequestBody RentUpdateRequest updateRequest) {
         HibernateRent rent = conversionService.convert(updateRequest, HibernateRent.class);
+        Date now = new Date(System.currentTimeMillis());
 
-        rentRepository.updateRent(rent.getId(), rent.getRentPrice(), rent.getCarId(), rent.getUserId(), rent.getRentStartDate(), rent.getRentEndDate(), LocalDateTime.now());
+        HibernateCar car = carRepository.findById(rent.getCarId()).get();
+        rent.setRentPrice(DAYS.between(rent.getRentStartDate(), rent.getRentEndDate()) * car.getPricePerDay());
+        if (rent.getRentPrice() < 0) {
+            throw new RuntimeException("Wrong dates. Start date cannot be after the end date");
+        }
+        rentRepository.updateRent(rent.getId(), rent.getRentPrice(), rent.getCarId(), rent.getUserId(), rent.getRentStartDate(), rent.getRentEndDate(), now);
         rent = rentRepository.findById(rent.getId()).get();
         return new ResponseEntity<>(rent, HttpStatus.OK);
     }
@@ -129,6 +135,9 @@ public class SpringDataRentController {
         rent.setCarId(car.getId());
         createRentErrorsCount = 0;
         rent.setRentPrice(DAYS.between(rent.getRentStartDate(), rent.getRentEndDate()) * car.getPricePerDay());
+        if (rent.getRentPrice() < 0) {
+            throw new RuntimeException("Wrong dates. Start date cannot be after the end date");
+        }
         try {
             emailSender.sendSimpleMessage("murashkotatsiana@gmail.com", "new rent created", "Hello, your new rent has been created!");
         } catch(Exception ex) {

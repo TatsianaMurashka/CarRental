@@ -31,10 +31,6 @@ public class RentUpdateRequest {
     private LocalDateTime rentEndDate;
 
     @Positive
-    @ApiModelProperty(required = true, dataType = "long", notes = "rent price per day")
-    private Double rentPrice;
-
-    @Positive
     @ApiModelProperty(required = true, dataType = "long", notes = "rent id")
     private Long id;
 }
