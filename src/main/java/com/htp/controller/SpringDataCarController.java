@@ -64,7 +64,7 @@ public class SpringDataCarController {
     })
     @GetMapping
     public ResponseEntity<List<HibernateCar>> findAll() {
-        return new ResponseEntity<>(carRepository.findAll(), HttpStatus.OK);
+        return new ResponseEntity<>(carRepository.findAllAvailableCars(), HttpStatus.OK);
     }
 
     @ApiOperation(value = "Create car")

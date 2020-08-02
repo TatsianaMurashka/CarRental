@@ -16,10 +16,10 @@ import java.util.List;
 public interface UserRepository extends CrudRepository<HibernateUser, Long>, JpaRepository<HibernateUser, Long>, PagingAndSortingRepository<HibernateUser, Long> {
 
 
-    @Cacheable
     @Query(value = "select u from HibernateUser u join u.roles role where role.roleName = 'ROLE_USER' and u.deleted = false")
     List<HibernateUser> findUsersWithUserRoles();
 
+    @Cacheable
     @Query("select u from HibernateUser u where u.deleted = false")
     List<HibernateUser> findAllActiveUsers();
 
