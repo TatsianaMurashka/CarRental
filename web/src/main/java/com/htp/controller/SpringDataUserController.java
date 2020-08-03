@@ -63,7 +63,7 @@ public class SpringDataUserController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "page", value = "Page number", example = "0", defaultValue = "0", dataType = "int", paramType = "query"),
             @ApiImplicitParam(name = "size", value = "Items per page", example = "3", defaultValue = "3", dataType = "int", paramType = "query"),
-            @ApiImplicitParam(name = "sort", value = "Field to sort", example = "0", defaultValue = "id", dataType = "string", paramType = "query"),
+            @ApiImplicitParam(name = "sort", value = "Field to sort", example = "id", defaultValue = "id", dataType = "string", paramType = "query"),
             @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string", paramType = "header")
     })
     @GetMapping("/search/page")

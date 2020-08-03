@@ -6,7 +6,15 @@ spring:
     password: root
     hikari:
       maximum-pool-size: 10
-
+  flyway:
+    enabled: true
+    ignore-missing-migrations: true
+    locations: classpath:/migration
+    baseline-on-migrate: true
+    baseline-description: Flyway Script
+    url: ${spring.datasource.url}
+    user: ${spring.datasource.username}
+    password: ${spring.datasource.password}
   jpa:
     properties:
       javax.persistence.validation.mode: none
