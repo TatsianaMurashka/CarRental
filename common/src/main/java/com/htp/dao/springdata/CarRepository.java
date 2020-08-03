@@ -12,13 +12,11 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 
 import java.util.List;
 
-@CacheConfig(cacheNames = {"availableCars"})
 public interface CarRepository extends CrudRepository<HibernateCar, Long>, JpaRepository<HibernateCar, Long>, PagingAndSortingRepository<HibernateCar, Long> {
 
     @Query(value = "select c from HibernateCar c where c.id in (select r.carId from HibernateRent r where r.rentStatus = 'CLOSED' group by r.carId having count(r.carId) > :count)")
     List<HibernateCar> findAllCarsWithRentCount(Long count);
 
-    @Cacheable
     @Query(value = "select c from HibernateCar c where c.availabilityStatus = 'AVAILABLE' ")
     List<HibernateCar> findAllAvailableCars();
 

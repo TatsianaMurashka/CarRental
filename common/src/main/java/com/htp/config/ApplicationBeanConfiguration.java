@@ -60,9 +60,9 @@ public class ApplicationBeanConfiguration {
 
     @Bean
     public CacheManager cacheManager() {
-        CaffeineCacheManager availableCars = new CaffeineCacheManager("availableCars");
-        availableCars.setCaffeine(cacheProperties());
-        return availableCars;
+        CaffeineCacheManager activeUsers = new CaffeineCacheManager("activeUsers");
+        activeUsers.setCaffeine(cacheProperties());
+        return activeUsers;
     }
 
     public Caffeine<Object, Object> cacheProperties() {

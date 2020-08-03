@@ -1,6 +1,8 @@
 package com.htp.dao.springdata;
 
 import com.htp.domain.hibernate.HibernateUser;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -9,11 +11,13 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 
 import java.util.List;
 
+@CacheConfig(cacheNames = {"activeUsers"})
 public interface UserRepository extends CrudRepository<HibernateUser, Long>, JpaRepository<HibernateUser, Long>, PagingAndSortingRepository<HibernateUser, Long> {
 
     @Query(value = "select u from HibernateUser u join u.roles role where role.roleName = 'ROLE_USER' and u.deleted = false")
     List<HibernateUser> findUsersWithUserRoles();
 
+    @Cacheable
     @Query("select u from HibernateUser u where u.deleted = false")
     List<HibernateUser> findAllActiveUsers();
 

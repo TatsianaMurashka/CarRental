@@ -12,7 +12,7 @@ import java.io.Serializable;
 public class AuthRequest implements Serializable {
 
     @NotEmpty
-    @ApiModelProperty(required = true, allowableValues = "Admin", dataType = "string")
+    @ApiModelProperty(required = true, allowableValues = "Admin123", dataType = "string")
     private String username;
 
     @NotEmpty

@@ -16,10 +16,6 @@ INSERT INTO public.m_cars (id, registration_number, model_id, price_per_day, off
 INSERT INTO public.m_cars (id, registration_number, model_id, price_per_day, office_id, availability_status) VALUES (21, '2281488', 1, 1488, 1, 'AVAILABLE');
 INSERT INTO public.m_cars (id, registration_number, model_id, price_per_day, office_id, availability_status) VALUES (23, 'newRegNumber', 1, 40, 1, 'AVAILABLE');
 INSERT INTO public.m_cars (id, registration_number, model_id, price_per_day, office_id, availability_status) VALUES (20, 'gtyttytyt', 1, 10, 1, 'AVAILABLE');
-INSERT INTO public.m_cars (id, registration_number, model_id, price_per_day, office_id, availability_status) VALUES (1, 'number111', 1, 150.5, 1, 'EXPIRED');
-INSERT INTO public.m_cars (id, registration_number, model_id, price_per_day, office_id, availability_status) VALUES (2, '1231212', 1, 15.5, 1, 'EXPIRED');
-INSERT INTO public.m_cars (id, registration_number, model_id, price_per_day, office_id, availability_status) VALUES (3, '12123123123123', 1, 300.8, 1, 'AVAILABLE');
-INSERT INTO public.m_cars (id, registration_number, model_id, price_per_day, office_id, availability_status) VALUES (4, 'string', 1, 20, 1, 'AVAILABLE');
 INSERT INTO public.m_cars (id, registration_number, model_id, price_per_day, office_id, availability_status) VALUES (14, 'htdmytdmjfj,ufkil', 1, 0, 1, 'AVAILABLE');
 INSERT INTO public.m_cars (id, registration_number, model_id, price_per_day, office_id, availability_status) VALUES (16, '6550629437262074595', 1, 5, 1, 'AVAILABLE');
 INSERT INTO public.m_cars (id, registration_number, model_id, price_per_day, office_id, availability_status) VALUES (17, '6134168863457573000', 1, 5, 1, 'EXPIRED');

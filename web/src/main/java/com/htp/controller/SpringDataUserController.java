@@ -66,7 +66,7 @@ public class SpringDataUserController {
             @ApiImplicitParam(name = "sort", value = "Field to sort", example = "id", defaultValue = "id", dataType = "string", paramType = "query"),
             @ApiImplicitParam(name = "X-Auth-Token", value = "token", required = true, dataType = "string", paramType = "header")
     })
-    @GetMapping("/search/page")
+    @GetMapping("/searchPage")
     public ResponseEntity<Page<HibernateUser>> searchWithPagination(@ApiIgnore Pageable pageable) {
         Page<HibernateUser> usersPage = userRepository.findAll(pageable);
         return new ResponseEntity<>(usersPage, HttpStatus.OK);
